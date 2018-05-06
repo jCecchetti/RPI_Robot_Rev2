@@ -2,6 +2,7 @@ package kinematics;
 
 import adafruithat.AdafruitServo;
 import util.Position;
+import util.Trig;
 
 public class Leg {
 	
@@ -51,16 +52,16 @@ public class Leg {
 	
 	public void calculateAngles(double x, double y, double z){
 		if(!left) x = -x;
+		
 		double C = Math.sqrt(z*z + x*x);
-		double sinc = Math.sin(90 + Math.atan(2*FEMUR/SERVOWIDTH));
+		double c = 90 + Trig.atan(FEMUR/SERVOWIDTH*2);//Okay
 		double A = Math.sqrt(FEMUR*FEMUR + SERVOWIDTH*SERVOWIDTH/4);
-		if(left) hipAngle = hipCenter + 180 - C - Math.asin(A*Math.sin(90 + Math.atan(2*FEMUR/SERVOWIDTH))/C) + Math.acos(z/C) - Math.atan(SERVOWIDTH/FEMUR/2);
-		else hipAngle = hipCenter - (180 - C - Math.asin(A*Math.sin(90 + Math.atan(2*FEMUR/SERVOWIDTH))/C) + Math.acos(z/C) - Math.atan(SERVOWIDTH/FEMUR/2));
-		double B = C * Math.sin(180 - C - Math.asin(A*Math.sin(90 + Math.atan(2*FEMUR/SERVOWIDTH)/C)))/sinc;
+		hipAngle = hipCenter + 180 - c - Trig.asin(A*Trig.sin(c)/C) + Trig.acos(-z/C) - Trig.atan(SERVOWIDTH/FEMUR/2);
+		double B = C * Trig.sin(180 - c - Trig.asin(A*Trig.sin(c)/C))/Trig.sin(c);
 		double L = Math.sqrt(B*B + y*y);
-		double absoluteKneeAngle = Math.acos((L*L + TIBIA*TIBIA - TARSUS*TARSUS)/(2*L*TIBIA));
-		kneeAngle = kneeCenter + absoluteKneeAngle - Math.atan2(y, B);
-		ankleAngle = ankleCenter - Math.acos((TIBIA*TIBIA + TARSUS*TARSUS - L*L)/(2*TIBIA*TARSUS));
+		double absoluteKneeAngle = Trig.acos((L*L + TIBIA*TIBIA - TARSUS*TARSUS)/(2*L*TIBIA));
+		kneeAngle = kneeCenter + absoluteKneeAngle - Trig.atan2(y, B);
+		ankleAngle = ankleCenter + Trig.acos((TIBIA*TIBIA + TARSUS*TARSUS - L*L)/(2*TIBIA*TARSUS));
 		
 		
 		/*hipAngle = (float) (hipCenter + Math.atan2(z, y));
