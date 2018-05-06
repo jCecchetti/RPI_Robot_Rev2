@@ -17,12 +17,9 @@ public class Main{
 	
 
 	public static void main(String[] args) {
-		Robot robot = new Robot();
-		robot.start();
-		double x = 1;
-		double y = 3;
+		double x = 2;
+		double y = 0;
 		double z = -4;
-		
 		
 		double C = Math.sqrt(z*z + x*x);
 		double c = 90 + Trig.atan(FEMUR/SERVOWIDTH*2);//Okay
@@ -34,9 +31,12 @@ public class Main{
 		kneeAngle = kneeCenter + absoluteKneeAngle - Trig.atan2(y, B);
 		ankleAngle = ankleCenter + Trig.acos((TIBIA*TIBIA + TARSUS*TARSUS - L*L)/(2*TIBIA*TARSUS));
 		
-		//System.out.println(hipAngle);
-		//System.out.println(kneeAngle);
-		//System.out.println(ankleAngle);
+		System.out.println(hipAngle);
+		System.out.println(kneeAngle);
+		System.out.println(ankleAngle);
+
+		Robot robot = new Robot();
+		robot.start();
 
 		
 	}	
