@@ -1,3 +1,4 @@
+import kinematics.Robot;
 import util.Trig;
 
 public class Main{
@@ -16,8 +17,8 @@ public class Main{
 	
 
 	public static void main(String[] args) {
-		//Robot robot = new Robot();
-		//robot.start();
+		Robot robot = new Robot();
+		robot.start();
 		double x = 1;
 		double y = 3;
 		double z = -4;
@@ -33,9 +34,9 @@ public class Main{
 		kneeAngle = kneeCenter + absoluteKneeAngle - Trig.atan2(y, B);
 		ankleAngle = ankleCenter + Trig.acos((TIBIA*TIBIA + TARSUS*TARSUS - L*L)/(2*TIBIA*TARSUS));
 		
-		System.out.println(hipAngle);
-		System.out.println(kneeAngle);
-		System.out.println(ankleAngle);
+		//System.out.println(hipAngle);
+		//System.out.println(kneeAngle);
+		//System.out.println(ankleAngle);
 
 		
 	}	
