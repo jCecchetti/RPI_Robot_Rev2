@@ -24,6 +24,7 @@ public class Robot extends Thread{
 	}
 	
 	public void setStartPosition(){
+		frontLeftLeg.setFootPos(new Position(0,0,-4.0,0,0,0));
 	}
 	
 	public void init(){
@@ -70,7 +71,7 @@ public class Robot extends Thread{
 					render();
 					ticks++;
 					delta--;
-					running = false;
+					//running = false;
 				}
 				
 				if(timer >= 1000000000){
