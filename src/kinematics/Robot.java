@@ -12,7 +12,7 @@ public class Robot extends Thread{
 	private boolean running = true;
 
 	Leg frontLeftLeg, frontRightLeg, hindLeftLeg, hindRightLeg;
-	public Leg legs[] = {frontLeftLeg, frontRightLeg, hindLeftLeg, hindRightLeg};
+	public Leg legs[];
 	//public Position legPos[] = {new Position(3.0,0,-6.0,0,0,0), new Position(0,0,0,0,0,0), new Position(1.927/2,-3.0,-6.0,0,0,0), new Position(0,0,0,0,0,0)};
 	public Position GlobalRobotPos = new Position(0,0,0,0,0,0);
 	private RobotMotion motion;
@@ -23,6 +23,10 @@ public class Robot extends Thread{
 		frontRightLeg = new Leg(servoHat.getServo("S09"), servoHat.getServo("S10"), servoHat.getServo("S11"), false);
 		hindLeftLeg = new Leg(servoHat.getServo("S05"), servoHat.getServo("S06"), servoHat.getServo("S07"), true);
 		hindRightLeg = new Leg(servoHat.getServo("S01"), servoHat.getServo("S02"), servoHat.getServo("S03"), false);
+		legs[0] = frontLeftLeg;
+		legs[1] = frontRightLeg;
+		legs[2] = hindLeftLeg;
+		legs[3] = hindRightLeg;
 		motion = new RobotMotion(legs);
 	}
 	
