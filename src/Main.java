@@ -30,10 +30,10 @@ public class Main{
 		double absoluteKneeAngle = Trig.acos((L*L + TIBIA*TIBIA - TARSUS*TARSUS)/(2*L*TIBIA));
 		kneeAngle = kneeCenter + absoluteKneeAngle - Trig.atan2(y, B);
 		ankleAngle = ankleCenter + Trig.acos((TIBIA*TIBIA + TARSUS*TARSUS - L*L)/(2*TIBIA*TARSUS));
-		
-		//System.out.println(hipAngle);
-		//System.out.println(kneeAngle);
-		//System.out.println(ankleAngle);
+		/*
+		System.out.println(hipAngle);
+		System.out.println(kneeAngle);
+		System.out.println(ankleAngle);*/
 
 		Robot robot = new Robot();
 		robot.start();

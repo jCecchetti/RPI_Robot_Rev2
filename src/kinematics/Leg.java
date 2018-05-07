@@ -53,7 +53,7 @@ public class Leg {
 	}
 	
 	public void calculateAngles(double x, double y, double z){
-		if(!left) x = -x;
+		//if(!left) x = -x;
 		
 		double C = Math.sqrt(z*z + x*x);
 		double c = 90 + Trig.atan(FEMUR/SERVOWIDTH*2);//Okay
