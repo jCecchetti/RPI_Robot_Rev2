@@ -25,7 +25,7 @@ public class Leg {
 	float neutralPulseWidth = 1.5f;
 	float maximumPulseWidth = 2.4f;*/
 	float minimumPulseWidth = 0.6f;
-	float neutralPulseWidth = 1.55f;
+	float neutralPulseWidth = 1.575f;
 	float maximumPulseWidth = 2.55f;
 	
 	boolean left;
