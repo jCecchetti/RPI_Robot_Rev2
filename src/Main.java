@@ -39,7 +39,7 @@ public class Main{
 		double L = Math.sqrt(B*B + y*y);
 		double absoluteKneeAngle = Trig.acos((L*L + TIBIA*TIBIA - TARSUS*TARSUS)/(2*L*TIBIA));
 		kneeAngle = kneeCenter - (absoluteKneeAngle - Trig.atan2(y, B));
-		ankleAngle = ankleCenter + Trig.acos((TIBIA*TIBIA + TARSUS*TARSUS - L*L)/(2*TIBIA*TARSUS));
+		ankleAngle = ankleCenter + (180 - Trig.acos((TIBIA*TIBIA + TARSUS*TARSUS - L*L)/(2*TIBIA*TARSUS)));
 		
 
 		System.out.println(hipAngle);

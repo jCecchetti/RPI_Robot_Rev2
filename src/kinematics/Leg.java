@@ -16,7 +16,7 @@ public class Leg {
 	private double ankleAngle = 90;
 	private float hipCenter = 90;
 	private float kneeCenter = 90;
-	private float ankleCenter = 10;
+	private float ankleCenter = 7;
 	
 	
 	private AdafruitServo servo1, servo2, servo3;
@@ -45,8 +45,7 @@ public class Leg {
 		calculateAngles(pos.x, pos.y, pos.z);
 		servo1.setPosition((float) hipAngle);
 		servo2.setPosition((float) kneeAngle);
-		//servo3.setPosition((float) ankleAngle);
-		servo3.setPosition((float) 7);
+		servo3.setPosition((float) ankleAngle);
 		return true;
 	}
 	
@@ -61,7 +60,7 @@ public class Leg {
 		double L = Math.sqrt(B*B + y*y);
 		double absoluteKneeAngle = Trig.acos((L*L + TIBIA*TIBIA - TARSUS*TARSUS)/(2*L*TIBIA));
 		kneeAngle = kneeCenter - (absoluteKneeAngle - Trig.atan2(y, B));
-		ankleAngle = ankleCenter + Trig.acos((TIBIA*TIBIA + TARSUS*TARSUS - L*L)/(2*TIBIA*TARSUS));
+		ankleAngle = ankleCenter + (180 - Trig.acos((TIBIA*TIBIA + TARSUS*TARSUS - L*L)/(2*TIBIA*TARSUS)));
 		
 		System.out.println(hipAngle);
 		System.out.println(kneeAngle);
