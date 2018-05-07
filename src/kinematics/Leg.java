@@ -66,7 +66,8 @@ public class Leg {
 		double absoluteKneeAngle = Trig.acos((L*L + TIBIA*TIBIA - TARSUS*TARSUS)/(2*L*TIBIA));
 		if(left) kneeAngle = kneeCenter - (absoluteKneeAngle - Trig.atan2(y, B));
 		else kneeAngle = kneeCenter - (absoluteKneeAngle - Trig.atan2(y, B));
-		ankleAngle = ankleCenter + (180 - Trig.acos((TIBIA*TIBIA + TARSUS*TARSUS - L*L)/(2*TIBIA*TARSUS)));
+		if(left) ankleAngle = ankleCenter + (180 - Trig.acos((TIBIA*TIBIA + TARSUS*TARSUS - L*L)/(2*TIBIA*TARSUS)));
+		else ankleAngle = ankleCenter - (180 - Trig.acos((TIBIA*TIBIA + TARSUS*TARSUS - L*L)/(2*TIBIA*TARSUS)));
 
 	}
 
