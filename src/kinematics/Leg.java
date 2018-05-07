@@ -6,7 +6,7 @@ import util.Trig;
 
 public class Leg {
 	
-	public static final double FEMUR = 0.7975;
+	public static final double FEMUR = 1.6;
 	public static final double TIBIA = 2.3585;
 	public static final double TARSUS = 3.4;
 	public static final double SERVOWIDTH = 1.927;
@@ -65,18 +65,6 @@ public class Leg {
 		System.out.println(hipAngle);
 		System.out.println(kneeAngle);
 		System.out.println(ankleAngle);
-		
-		/*hipAngle = (float) (hipCenter + Math.atan2(z, y));
-		kneeAngle = (float) (kneeCenter + Math.acos(((FEMUR*FEMUR + (Math.sqrt(z*z + y*y)-COXA)*(Math.sqrt(z*z + y*y)-COXA) - TIBIA*TIBIA)/
-				(2*FEMUR*Math.sqrt((Math.sqrt(z*z + y*y) - COXA)*(Math.sqrt(z*z + y*y) - COXA))))));
-		if(left){
-			ankleAngle = (float) (ankleCenter + Math.acos((TIBIA*TIBIA + FEMUR*FEMUR - (Math.sqrt(z*z + y*y) - COXA)*(Math.sqrt(z*z + y*y) - COXA))/
-					2*FEMUR*TIBIA));
-		}
-		else{
-			ankleAngle = (float) (ankleCenter - Math.acos((TIBIA*TIBIA + FEMUR*FEMUR - (Math.sqrt(z*z + y*y) - COXA)*(Math.sqrt(z*z + y*y) - COXA))/
-					2*FEMUR*TIBIA));
-		}*/
 	}
 
 }
