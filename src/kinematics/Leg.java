@@ -14,8 +14,8 @@ public class Leg {
 	private double hipAngle = 90;
 	private double kneeAngle = 90;
 	private double ankleAngle = 90;
-	private float hipCenter = 90;
-	private float kneeCenter = 90;
+	private float hipCenter = 92;
+	private float kneeCenter = 92;
 	private float ankleCenter = 7;
 	
 	
