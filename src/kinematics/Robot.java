@@ -71,7 +71,7 @@ public class Robot extends Thread{
 					render();
 					ticks++;
 					delta--;
-					running = true;
+					running = false;
 				}
 				
 				if(timer >= 1000000000){
