@@ -12,7 +12,7 @@ public class Robot extends Thread{
 	
 	Leg frontLeftLeg, frontRightLeg, hindLeftLeg, hindRightLeg;
 	public Leg legs[] = {frontLeftLeg, frontRightLeg, hindLeftLeg, hindRightLeg};
-	public Position legPos[] = {new Position(2.0,2.0,-6.0,0,0,0), new Position(0,0,0,0,0,0), new Position(0,0,0,0,0,0), new Position(0,0,0,0,0,0)};
+	public Position legPos[] = {new Position(0.0,2.0,-6.0,0,0,0), new Position(0,0,0,0,0,0), new Position(0,0,0,0,0,0), new Position(0,0,0,0,0,0)};
 	public Position GlobalRobotPos = new Position(0,0,0,0,0,0);
 	
 	
