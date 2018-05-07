@@ -47,7 +47,7 @@ public class Robot extends Thread{
 		//else if(legPos[0].z < -4.5) legPos[0].z += .033333;
 		frontLeftLeg.setFootPos(legPos[0]);
 		//hindLeftLeg.setFootPos(legPos[0]);
-		//frontRightLeg.setFootPos(legPos[0]);
+		frontRightLeg.setFootPos(legPos[0]);
 		//hindRightLeg.setFootPos(legPos[0]);
 		//System.out.println(legPos[0].x);
 	}
