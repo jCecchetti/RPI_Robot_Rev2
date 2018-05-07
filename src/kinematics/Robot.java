@@ -12,7 +12,7 @@ public class Robot extends Thread{
 	
 	Leg frontLeftLeg, frontRightLeg, hindLeftLeg, hindRightLeg;
 	public Leg legs[] = {frontLeftLeg, frontRightLeg, hindLeftLeg, hindRightLeg};
-	public Position legPos[] = {new Position(3.0,-3.0,-6.0,0,0,0), new Position(0,0,0,0,0,0), new Position(1.927/2,-3.0,-6.0,0,0,0), new Position(0,0,0,0,0,0)};
+	public Position legPos[] = {new Position(3.0,0,-6.0,0,0,0), new Position(0,0,0,0,0,0), new Position(1.927/2,-3.0,-6.0,0,0,0), new Position(0,0,0,0,0,0)};
 	public Position GlobalRobotPos = new Position(0,0,0,0,0,0);
 	
 	
@@ -49,6 +49,7 @@ public class Robot extends Thread{
 		hindLeftLeg.setFootPos(legPos[0]);
 		frontRightLeg.setFootPos(legPos[0]);
 		hindRightLeg.setFootPos(legPos[0]);
+		System.out.println(legPos[0].x);
 	}
 	
 	public void render(){
