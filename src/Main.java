@@ -7,8 +7,8 @@ public class Main{
 	public static void main(String[] args) {
 		
 
-		mathTest(-1,0,-5.0, true);
-		mathTest(1,0,-5.0, false);
+		mathTest(0,0,-5.0, true);
+		mathTest(0,0,-5.0, false);
 		Robot robot = new Robot();
 		robot.start();
 		
@@ -54,8 +54,8 @@ public class Main{
 //		System.out.println(Trig.atan(SERVOWIDTH/FEMUR/2));
 //		System.out.println(90 - Trig.atan(FEMUR/SERVOWIDTH*2));
 
-		System.out.println(hipAngle - hipCenter);
-		//System.out.println(kneeAngle);
-		//System.out.println(ankleAngle);
+		System.out.println(hipAngle);
+		System.out.println(kneeAngle);
+		System.out.println(ankleAngle);
 	}
 }
