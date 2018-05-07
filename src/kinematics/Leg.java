@@ -42,7 +42,7 @@ public class Leg {
 	}
 	
 	public boolean setFootPos(Position pos){
-		calculateAngles(pos.x, pos.y, pos.z);
+		//calculateAngles(pos.x, pos.y, pos.z);
 		calculateAngles(0.0, 0.0, -4.0);
 		servo1.setPosition((float) hipAngle);
 		servo2.setPosition((float) kneeAngle);
