@@ -40,7 +40,7 @@ public class Robot extends Thread{
 	public void update(){
 		if(legPos[0].y < 3)legPos[0].y += .03333;
 		else if(legPos[0].x < 0) legPos[0].x += .033333;
-		else if(legPos[0].z < -1) legPos[0].z += .033333;
+		else if(legPos[0].z < -2) legPos[0].z += .033333;
 		frontLeftLeg.setFootPos(legPos[0]);
 	}
 	
