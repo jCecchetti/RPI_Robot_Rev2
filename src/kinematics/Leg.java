@@ -6,10 +6,10 @@ import util.Trig;
 
 public class Leg {
 	
-	public static final double FEMUR = 6.0;
-	public static final double TIBIA = 6.0;
-	public static final double TARSUS = 2.0;
-	public static final double SERVOWIDTH = 1.0;
+	public static final double FEMUR = 0.7975;
+	public static final double TIBIA = 2.3585;
+	public static final double TARSUS = 3.4;
+	public static final double SERVOWIDTH = 1.927;
 	
 	private double hipAngle = 90;
 	private double kneeAngle = 90;
