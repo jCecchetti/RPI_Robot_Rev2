@@ -15,7 +15,7 @@ public class Robot extends Thread{
 	public Leg legs[] = {frontLeftLeg, frontRightLeg, hindLeftLeg, hindRightLeg};
 	//public Position legPos[] = {new Position(3.0,0,-6.0,0,0,0), new Position(0,0,0,0,0,0), new Position(1.927/2,-3.0,-6.0,0,0,0), new Position(0,0,0,0,0,0)};
 	public Position GlobalRobotPos = new Position(0,0,0,0,0,0);
-	private RobotMotion motion = new RobotMotion(legs);
+	private RobotMotion motion;
 	
 	public Robot(){
 		servoHat = new AdafruitServoHat(servoHATAddress);
@@ -23,6 +23,7 @@ public class Robot extends Thread{
 		frontRightLeg = new Leg(servoHat.getServo("S09"), servoHat.getServo("S10"), servoHat.getServo("S11"), false);
 		hindLeftLeg = new Leg(servoHat.getServo("S05"), servoHat.getServo("S06"), servoHat.getServo("S07"), true);
 		hindRightLeg = new Leg(servoHat.getServo("S01"), servoHat.getServo("S02"), servoHat.getServo("S03"), false);
+		motion = new RobotMotion(legs);
 	}
 	
 	public void setStartPosition(){
