@@ -7,7 +7,7 @@ public class Main{
 	public static void main(String[] args) {
 		
 
-		mathTest(-2,0,-5.0, true);
+		mathTest(0,0,-5.0, true);
 		Robot robot = new Robot();
 		robot.start();
 		
@@ -35,9 +35,10 @@ public class Main{
 		if(x > 0) hipAngle = hipCenter - (180 - c - Trig.asin(A*Trig.sin(c)/C) + Trig.acos(-z/C) - Trig.atan(SERVOWIDTH/FEMUR/2));
 		else hipAngle = hipCenter - (180 - c - Trig.asin(A*Trig.sin(c)/C) + Trig.acos(-z/C) - Trig.atan(SERVOWIDTH/FEMUR/2));
 		
-		System.out.println(Trig.asin(A*Trig.sin(c)/C));
-		System.out.println(Trig.acos(-z/C));
+		System.out.println(Trig.asin(A*Trig.sin(c)/C));//Angle of an intermediate triangle from front view
+		System.out.println(Trig.acos(-z/C));//Angle from hip to foot from front view
 		System.out.println(Trig.atan(SERVOWIDTH/FEMUR/2));
+		System.out.println(90 - Trig.atan(FEMUR/SERVOWIDTH*2));
 		
 		double B = C * Trig.sin(180 - c - Trig.asin(A*Trig.sin(c)/C))/Trig.sin(c);
 		//System.out.println(B);
