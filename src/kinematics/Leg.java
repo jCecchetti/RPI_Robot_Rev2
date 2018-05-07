@@ -21,9 +21,12 @@ public class Leg {
 	
 	private AdafruitServo servo1, servo2, servo3;
 	
+	/*float minimumPulseWidth = 0.6f;
+	float neutralPulseWidth = 1.5f;
+	float maximumPulseWidth = 2.4f;*/
 	float minimumPulseWidth = 0.6f;
 	float neutralPulseWidth = 1.5f;
-	float maximumPulseWidth = 2.4f;
+	float maximumPulseWidth = 2.5f;
 	
 	boolean left;
 	
@@ -46,7 +49,7 @@ public class Leg {
 		/*servo1.setPosition((float) hipAngle);
 		servo2.setPosition((float) kneeAngle);
 		servo3.setPosition((float) ankleAngle);*/
-		servo1.setPosition((float) 180);
+		servo1.setPosition((float) 0);
 		servo2.setPosition((float) 180);
 		servo3.setPosition((float) 7);
 		return true;
