@@ -14,8 +14,8 @@ public class Leg {
 	private double hipAngle = 90;
 	private double kneeAngle = 90;
 	private double ankleAngle = 90;
-	private float hipCenter = 100;
-	private float kneeCenter = 100;
+	private float hipCenter = 90;
+	private float kneeCenter = 90;
 	private float ankleCenter = 7;
 	
 	
@@ -46,12 +46,10 @@ public class Leg {
 	
 	public boolean setFootPos(Position pos){
 		calculateAngles(pos.x, pos.y, pos.z);
-		/*servo1.setPosition((float) hipAngle);
+		servo1.setPosition((float) hipAngle);
 		servo2.setPosition((float) kneeAngle);
-		servo3.setPosition((float) ankleAngle);*/
-		servo1.setPosition((float) 90);
-		servo2.setPosition((float) 180);
-		servo3.setPosition((float) 7);
+		servo3.setPosition((float) ankleAngle);
+
 		return true;
 	}
 	
