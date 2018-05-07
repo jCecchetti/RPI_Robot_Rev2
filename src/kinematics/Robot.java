@@ -12,6 +12,7 @@ public class Robot extends Thread{
 	
 	Leg frontLeftLeg, frontRightLeg, hindLeftLeg, hindRightLeg;
 	public Leg legs[] = {frontLeftLeg, frontRightLeg, hindLeftLeg, hindRightLeg};
+	public Position legPos[] = {new Position(2.0,2.0,-5.0,0,0,0), new Position(0,0,0,0,0,0), new Position(0,0,0,0,0,0), new Position(0,0,0,0,0,0)};
 	public Position GlobalRobotPos = new Position(0,0,0,0,0,0);
 	
 	
@@ -25,7 +26,7 @@ public class Robot extends Thread{
 	
 	public void setStartPosition(){
 		//frontLeftLeg.calculateAngles(0.0, 0.0, -4.0);
-		frontLeftLeg.setFootPos(new Position(1.927/2.0, 2.0, -6.0,0,0,0));
+		frontLeftLeg.setFootPos(legPos[0]);
 	}
 	
 	public void init(){
@@ -37,7 +38,9 @@ public class Robot extends Thread{
 	}
 	
 	public void update(){
-		
+		if(legPos[0].y > -3)legPos[0].y -= .03333;
+		else if(legPos[0].x > -2) legPos[0].x -= .033333;
+		else if(legPos[0].z < -3) legPos[0].z += .033333;
 	}
 	
 	public void render(){
@@ -73,7 +76,7 @@ public class Robot extends Thread{
 					render();
 					ticks++;
 					delta--;
-					if(totalSeconds > 3) running = false;
+					if(totalSeconds > 9) running = false;
 				}
 				
 				if(timer >= 1000000000){
