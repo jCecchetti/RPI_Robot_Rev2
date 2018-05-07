@@ -17,14 +17,14 @@ public class Robot extends Thread{
 	
 	public Robot(){
 		servoHat = new AdafruitServoHat(servoHATAddress);
-		frontLeftLeg = new Leg(servoHat.getServo("S13"), servoHat.getServo("S14"), servoHat.getServo("S15"), true);
+		//frontLeftLeg = new Leg(servoHat.getServo("S13"), servoHat.getServo("S14"), servoHat.getServo("S15"), true);
 		//frontRightLeg = new Leg(servoHat.getServo("S09"), servoHat.getServo("S10"), servoHat.getServo("S11"), false);
 		//hindLeftLeg = new Leg(servoHat.getServo("S05"), servoHat.getServo("S06"), servoHat.getServo("S07"), true);
 		//hindRightLeg = new Leg(servoHat.getServo("S01"), servoHat.getServo("S02"), servoHat.getServo("S03"), false);
 	}
 	
 	public void setStartPosition(){
-		frontLeftLeg.setFootPos(new Position(0,0,-4.0,0,0,0));
+		//frontLeftLeg.setFootPos(new Position(0,0,-4.0,0,0,0));
 	}
 	
 	public void init(){
