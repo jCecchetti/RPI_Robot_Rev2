@@ -12,7 +12,7 @@ public class Robot extends Thread{
 	
 	Leg frontLeftLeg, frontRightLeg, hindLeftLeg, hindRightLeg;
 	public Leg legs[] = {frontLeftLeg, frontRightLeg, hindLeftLeg, hindRightLeg};
-	public Position legPos[] = {new Position(1.927/2,-3.0,-6.0,0,0,0), new Position(0,0,0,0,0,0), new Position(1.927/2,-3.0,-6.0,0,0,0), new Position(0,0,0,0,0,0)};
+	public Position legPos[] = {new Position(3.0,-3.0,-6.0,0,0,0), new Position(0,0,0,0,0,0), new Position(1.927/2,-3.0,-6.0,0,0,0), new Position(0,0,0,0,0,0)};
 	public Position GlobalRobotPos = new Position(0,0,0,0,0,0);
 	
 	
@@ -28,7 +28,7 @@ public class Robot extends Thread{
 		//frontLeftLeg.calculateAngles(0.0, 0.0, -4.0);
 		frontLeftLeg.setFootPos(legPos[0]);
 		frontRightLeg.setFootPos(legPos[0]);
-		hindLeftLeg.setFootPos(legPos[2]);
+		hindLeftLeg.setFootPos(legPos[0]);
 		hindRightLeg.setFootPos(legPos[0]);
 		
 	}
@@ -42,14 +42,11 @@ public class Robot extends Thread{
 	}
 	
 	public void update(){
-		if(legPos[0].y < 1)legPos[0].y += .03333;
+		if(legPos[0].x > -3)legPos[0].x -= .03333;
 		//else if(legPos[0].x < 0) legPos[0].x += .033333;
-		else if(legPos[0].z < -4.5) legPos[0].z += .033333;
+		//else if(legPos[0].z < -4.5) legPos[0].z += .033333;
 		frontLeftLeg.setFootPos(legPos[0]);
-		if(legPos[2].y < 1)legPos[2].y += .03333;
-		//else if(legPos[2].x < 0) legPos[2].x += .033333;
-		else if(legPos[2].z < -4.5) legPos[2].z += .033333;
-		hindLeftLeg.setFootPos(legPos[2]);
+		hindLeftLeg.setFootPos(legPos[0]);
 		frontRightLeg.setFootPos(legPos[0]);
 		hindRightLeg.setFootPos(legPos[0]);
 	}
@@ -87,7 +84,7 @@ public class Robot extends Thread{
 					render();
 					ticks++;
 					delta--;
-					if(totalSeconds > 9) running = false;
+					if(totalSeconds > 4) running = false;
 				}
 				
 				if(timer >= 1000000000){
