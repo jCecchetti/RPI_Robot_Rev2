@@ -6,8 +6,8 @@ import util.Position;
 
 public class Body {
 	
-	private static Position[] localCornerPos;
-	private static Position[] globalCornerPos;
+	private static Position[] localCornerPos = {new Position(0,0,0,0,0,0),new Position(0,0,0,0,0,0),new Position(0,0,0,0,0,0),new Position(0,0,0,0,0,0)};
+	private static Position[] globalCornerPos = {new Position(0,0,0,0,0,0),new Position(0,0,0,0,0,0),new Position(0,0,0,0,0,0),new Position(0,0,0,0,0,0)};
 	
 	public static Position[] getLocalCornerPos(Position localBodyPos){
 		double[][] unrotatedLocalCornerPos = {{-Constants.BODYWIDTH/2, Constants.BODYLENGTH/2, 0},
@@ -26,8 +26,8 @@ public class Body {
 									    {0, 0, 1}};
 		//double[][] RotationMatrix = Matrix.multiply(rollRotationMatrix, Matrix.Multiply)
 		for(int i = 0; i < 4; i++){
-			unrotatedLocalCornerPos[i] = Matrix.multiply(rollRotationMatrix, unrotatedLocalCornerPos[i]);
-			unrotatedLocalCornerPos[i] = Matrix.multiply(pitchRotationMatrix, unrotatedLocalCornerPos[i]);
+			//unrotatedLocalCornerPos[i] = Matrix.multiply(rollRotationMatrix, unrotatedLocalCornerPos[i]);
+			//unrotatedLocalCornerPos[i] = Matrix.multiply(pitchRotationMatrix, unrotatedLocalCornerPos[i]);
 			double[] rotatedLocalCornerPos = Matrix.multiply(yawRotationMatrix, unrotatedLocalCornerPos[i]);
 			localCornerPos[i] = new Position(rotatedLocalCornerPos[0] + localBodyPos.x, rotatedLocalCornerPos[1] + localBodyPos.y,
 					rotatedLocalCornerPos[2] + localBodyPos.z, localBodyPos.roll, localBodyPos.pitch, localBodyPos.yaw);
