@@ -17,7 +17,7 @@ public class Robot extends Thread{
 	
 	public Robot(){
 		servoHat = new AdafruitServoHat(servoHATAddress);
-		//frontLeftLeg = new Leg(servoHat.getServo("S13"), servoHat.getServo("S14"), servoHat.getServo("S15"), true);
+		frontLeftLeg = new Leg(servoHat.getServo("S13"), servoHat.getServo("S14"), servoHat.getServo("S15"), true);
 		//frontRightLeg = new Leg(servoHat.getServo("S09"), servoHat.getServo("S10"), servoHat.getServo("S11"), false);
 		//hindLeftLeg = new Leg(servoHat.getServo("S05"), servoHat.getServo("S06"), servoHat.getServo("S07"), true);
 		//hindRightLeg = new Leg(servoHat.getServo("S01"), servoHat.getServo("S02"), servoHat.getServo("S03"), false);
@@ -59,6 +59,7 @@ public class Robot extends Thread{
 			long lastTime = System.nanoTime();
 			long timer = 0;
 			int ticks = 0;
+			long totalSeconds = 0;
 			
 			while(running){
 				now = System.nanoTime();
@@ -71,13 +72,14 @@ public class Robot extends Thread{
 					render();
 					ticks++;
 					delta--;
-					running = false;
+					if(totalSeconds > 3) running = false;
 				}
 				
 				if(timer >= 1000000000){
 					System.out.println("Ticks and Frames " + ticks);
 					timer = 0;
 					ticks = 0;
+					totalSeconds++;
 				}
 			}
 			
