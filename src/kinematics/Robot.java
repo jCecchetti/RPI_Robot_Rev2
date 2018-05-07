@@ -42,13 +42,13 @@ public class Robot extends Thread{
 	}
 	
 	public void update(){
-		if(legPos[0].y < 3)legPos[0].y += .03333;
+		if(legPos[0].y < 1)legPos[0].y += .03333;
 		//else if(legPos[0].x < 0) legPos[0].x += .033333;
-		else if(legPos[0].z < -2) legPos[0].z += .033333;
+		else if(legPos[0].z < -4.5) legPos[0].z += .033333;
 		frontLeftLeg.setFootPos(legPos[0]);
-		if(legPos[2].y < 3)legPos[2].y += .03333;
+		if(legPos[2].y < 1)legPos[2].y += .03333;
 		//else if(legPos[2].x < 0) legPos[2].x += .033333;
-		else if(legPos[2].z < -4) legPos[2].z += .033333;
+		else if(legPos[2].z < -4.5) legPos[2].z += .033333;
 		hindLeftLeg.setFootPos(legPos[2]);
 		frontRightLeg.setFootPos(legPos[0]);
 		hindRightLeg.setFootPos(legPos[0]);
