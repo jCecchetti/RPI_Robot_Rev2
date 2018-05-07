@@ -7,8 +7,8 @@ public class Main{
 	public static void main(String[] args) {
 		
 
-		mathTest(0,0,-5.0, true);
-		mathTest(0,0,-5.0, false);
+		//mathTest(0,0,-5.0, true);
+		//mathTest(0,0,-5.0, false);
 		Robot robot = new Robot();
 		robot.start();
 		

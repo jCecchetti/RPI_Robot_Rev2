@@ -1,6 +1,7 @@
 package kinematics;
 
 import adafruithat.AdafruitServoHat;
+import motion.RobotMotion;
 import util.Constants;
 import util.Position;
 
@@ -9,12 +10,12 @@ public class Robot extends Thread{
 	AdafruitServoHat servoHat;
 	final int servoHATAddress = 0X40;
 	private boolean running = true;
-	
+
 	Leg frontLeftLeg, frontRightLeg, hindLeftLeg, hindRightLeg;
 	public Leg legs[] = {frontLeftLeg, frontRightLeg, hindLeftLeg, hindRightLeg};
-	public Position legPos[] = {new Position(3.0,0,-6.0,0,0,0), new Position(0,0,0,0,0,0), new Position(1.927/2,-3.0,-6.0,0,0,0), new Position(0,0,0,0,0,0)};
+	//public Position legPos[] = {new Position(3.0,0,-6.0,0,0,0), new Position(0,0,0,0,0,0), new Position(1.927/2,-3.0,-6.0,0,0,0), new Position(0,0,0,0,0,0)};
 	public Position GlobalRobotPos = new Position(0,0,0,0,0,0);
-	
+	private RobotMotion motion = new RobotMotion(legs);
 	
 	public Robot(){
 		servoHat = new AdafruitServoHat(servoHATAddress);
@@ -26,7 +27,7 @@ public class Robot extends Thread{
 	
 	public void setStartPosition(){
 		//frontLeftLeg.calculateAngles(0.0, 0.0, -4.0);
-		frontLeftLeg.setFootPos(legPos[0]);
+		//frontLeftLeg.setFootPos(legPos[0]);
 		//frontRightLeg.setFootPos(legPos[0]);
 		//hindLeftLeg.setFootPos(legPos[0]);
 		//hindRightLeg.setFootPos(legPos[0]);
@@ -42,14 +43,7 @@ public class Robot extends Thread{
 	}
 	
 	public void update(){
-		if(legPos[0].x > -3)legPos[0].x -= .03333;
-		//else if(legPos[0].x < 0) legPos[0].x += .033333;
-		//else if(legPos[0].z < -4.5) legPos[0].z += .033333;
-		frontLeftLeg.setFootPos(legPos[0]);
-		hindLeftLeg.setFootPos(legPos[0]);
-		frontRightLeg.setFootPos(legPos[0]);
-		hindRightLeg.setFootPos(legPos[0]);
-		//System.out.println(legPos[0].x);
+		motion.handleLegs();
 	}
 	
 	public void render(){
