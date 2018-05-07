@@ -12,7 +12,7 @@ public class Robot extends Thread{
 	
 	Leg frontLeftLeg, frontRightLeg, hindLeftLeg, hindRightLeg;
 	public Leg legs[] = {frontLeftLeg, frontRightLeg, hindLeftLeg, hindRightLeg};
-	public Position legPos[] = {new Position(0.0,2.0,-6.0,0,0,0), new Position(0,0,0,0,0,0), new Position(0,0,0,0,0,0), new Position(0,0,0,0,0,0)};
+	public Position legPos[] = {new Position(-2.0,-3.0,-6.0,0,0,0), new Position(0,0,0,0,0,0), new Position(0,0,0,0,0,0), new Position(0,0,0,0,0,0)};
 	public Position GlobalRobotPos = new Position(0,0,0,0,0,0);
 	
 	
@@ -38,8 +38,8 @@ public class Robot extends Thread{
 	}
 	
 	public void update(){
-		if(legPos[0].y > -3)legPos[0].y -= .03333;
-		else if(legPos[0].x > -2) legPos[0].x -= .033333;
+		if(legPos[0].y < 3)legPos[0].y += .03333;
+		else if(legPos[0].x < 2) legPos[0].x += .033333;
 		else if(legPos[0].z < -3) legPos[0].z += .033333;
 		frontLeftLeg.setFootPos(legPos[0]);
 	}
