@@ -17,12 +17,12 @@ public class RobotMotion {
 	private double robotSpeed = 1;// in/s
 	private double turningSpeed = 45;// degrees/s
 	private double updateRate = Constants.UPDATESPERSECOND;
-	//private Leg frontLeftLeg, frontRightLeg, hindLeftLeg, hindRightLeg;
+	private Leg frontLeftLeg, frontRightLeg, hindLeftLeg, hindRightLeg;
 	private Leg[] legs;
 	
 	public RobotMotion(Leg[] legs){
 		this.legs = legs;
-//		frontLeftLeg = legs[0];
+		legs[0].toString();
 //		frontRightLeg = legs[1];
 //		hindLeftLeg = legs[2];
 //		hindRightLeg = legs[3];
