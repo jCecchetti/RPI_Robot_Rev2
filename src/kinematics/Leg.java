@@ -60,11 +60,11 @@ public class Leg {
 		
 		double c = 90 + Trig.atan(FEMUR/SERVOWIDTH*2);//Okay
 		double A = Math.sqrt(FEMUR*FEMUR + SERVOWIDTH*SERVOWIDTH/4);
-		if(x > 0) hipAngle = hipCenter - (180 - c - Trig.asin(A*Trig.sin(c)/C) + Trig.acos(-z/C) - Trig.atan(SERVOWIDTH/FEMUR/2));
+		if((left && x > 0) || (!left && x > 0)) hipAngle = hipCenter - (180 - c - Trig.asin(A*Trig.sin(c)/C) + Trig.acos(-z/C) - Trig.atan(SERVOWIDTH/FEMUR/2));
 		else hipAngle = hipCenter - (180 - c - Trig.asin(A*Trig.sin(c)/C) - Trig.acos(-z/C) - Trig.atan(SERVOWIDTH/FEMUR/2));
 		if(!left){
-			//if(x > 0) hipAngle += 90.0;
-			//else hipAngle -= 90.0;
+			if(x > 0) hipAngle = hipCenter - (hipAngle - hipCenter);
+			else hipAngle =  hipCenter + (hipCenter - hipAngle);
 		}
 		double B = C * Trig.sin(180 - c - Trig.asin(A*Trig.sin(c)/C))/Trig.sin(c);
 		double L = Math.sqrt(B*B + y*y);
