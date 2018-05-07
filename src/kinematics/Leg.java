@@ -14,8 +14,8 @@ public class Leg {
 	private double hipAngle = 90;
 	private double kneeAngle = 90;
 	private double ankleAngle = 90;
-	private float hipCenter = 92;
-	private float kneeCenter = 92;
+	private float hipCenter = 100;
+	private float kneeCenter = 100;
 	private float ankleCenter = 7;
 	
 	
@@ -46,8 +46,8 @@ public class Leg {
 		/*servo1.setPosition((float) hipAngle);
 		servo2.setPosition((float) kneeAngle);
 		servo3.setPosition((float) ankleAngle);*/
-		servo1.setPosition((float) 100);
-		servo2.setPosition((float) 100);
+		servo1.setPosition((float) 180);
+		servo2.setPosition((float) 180);
 		servo3.setPosition((float) 7);
 		return true;
 	}
