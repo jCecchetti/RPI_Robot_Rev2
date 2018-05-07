@@ -16,7 +16,7 @@ public class Leg {
 	private double ankleAngle = 90;
 	private float hipCenter = 90;
 	private float kneeCenter = 90;
-	private float ankleCenter = 0;
+	private float ankleCenter = 10;
 	
 	
 	private AdafruitServo servo1, servo2, servo3;
@@ -42,8 +42,7 @@ public class Leg {
 	}
 	
 	public boolean setFootPos(Position pos){
-		//calculateAngles(pos.x, pos.y, pos.z);
-		calculateAngles(0.0, 0.0, -4.0);
+		calculateAngles(pos.x, pos.y, pos.z);
 		servo1.setPosition((float) hipAngle);
 		servo2.setPosition((float) kneeAngle);
 		servo3.setPosition((float) ankleAngle);

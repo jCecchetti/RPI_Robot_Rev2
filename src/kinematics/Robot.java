@@ -25,7 +25,7 @@ public class Robot extends Thread{
 	
 	public void setStartPosition(){
 		//frontLeftLeg.calculateAngles(0.0, 0.0, -4.0);
-		frontLeftLeg.setFootPos(new Position(2,0,-4.0,0,0,0));
+		frontLeftLeg.setFootPos(new Position(1.927/2.0, 0, -6.0,0,0,0));
 	}
 	
 	public void init(){
