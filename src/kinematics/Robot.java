@@ -12,7 +12,7 @@ public class Robot extends Thread{
 	
 	Leg frontLeftLeg, frontRightLeg, hindLeftLeg, hindRightLeg;
 	public Leg legs[] = {frontLeftLeg, frontRightLeg, hindLeftLeg, hindRightLeg};
-	public Position legPos[] = {new Position(-3.0,-3.0,-6.0,0,0,0), new Position(0,0,0,0,0,0), new Position(0,0,0,0,0,0), new Position(0,0,0,0,0,0)};
+	public Position legPos[] = {new Position(-3.0,-3.0,-6.0,0,0,0), new Position(0,0,0,0,0,0), new Position(-3.0,-3.0,-6.0,0,0,0), new Position(0,0,0,0,0,0)};
 	public Position GlobalRobotPos = new Position(0,0,0,0,0,0);
 	
 	
@@ -20,13 +20,14 @@ public class Robot extends Thread{
 		servoHat = new AdafruitServoHat(servoHATAddress);
 		frontLeftLeg = new Leg(servoHat.getServo("S13"), servoHat.getServo("S14"), servoHat.getServo("S15"), true);
 		//frontRightLeg = new Leg(servoHat.getServo("S09"), servoHat.getServo("S10"), servoHat.getServo("S11"), false);
-		//hindLeftLeg = new Leg(servoHat.getServo("S05"), servoHat.getServo("S06"), servoHat.getServo("S07"), true);
+		hindLeftLeg = new Leg(servoHat.getServo("S05"), servoHat.getServo("S06"), servoHat.getServo("S07"), true);
 		//hindRightLeg = new Leg(servoHat.getServo("S01"), servoHat.getServo("S02"), servoHat.getServo("S03"), false);
 	}
 	
 	public void setStartPosition(){
 		//frontLeftLeg.calculateAngles(0.0, 0.0, -4.0);
 		frontLeftLeg.setFootPos(legPos[0]);
+		hindLeftLeg.setFootPos(legPos[2]);
 	}
 	
 	public void init(){
@@ -42,6 +43,10 @@ public class Robot extends Thread{
 		else if(legPos[0].x < 0) legPos[0].x += .033333;
 		else if(legPos[0].z < -2) legPos[0].z += .033333;
 		frontLeftLeg.setFootPos(legPos[0]);
+		if(legPos[2].y < 3)legPos[2].y += .03333;
+		else if(legPos[2].x < 0) legPos[2].x += .033333;
+		else if(legPos[2].z < -2) legPos[2].z += .033333;
+		hindLeftLeg.setFootPos(legPos[2]);
 	}
 	
 	public void render(){
