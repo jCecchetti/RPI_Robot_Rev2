@@ -65,6 +65,9 @@ public class Leg {
 		kneeAngle = kneeCenter + absoluteKneeAngle - Trig.atan2(y, B);
 		ankleAngle = ankleCenter + Trig.acos((TIBIA*TIBIA + TARSUS*TARSUS - L*L)/(2*TIBIA*TARSUS));
 		
+		System.out.println(hipAngle);
+		System.out.println(kneeAngle);
+		System.out.println(ankleAngle);
 		
 		/*hipAngle = (float) (hipCenter + Math.atan2(z, y));
 		kneeAngle = (float) (kneeCenter + Math.acos(((FEMUR*FEMUR + (Math.sqrt(z*z + y*y)-COXA)*(Math.sqrt(z*z + y*y)-COXA) - TIBIA*TIBIA)/
