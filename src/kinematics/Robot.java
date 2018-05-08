@@ -27,7 +27,7 @@ public class Robot extends Thread{
 		legs[1] = frontRightLeg;
 		legs[2] = hindLeftLeg;
 		legs[3] = hindRightLeg;
-		motion = new RobotMotion(legs);
+		motion = new RobotMotion(frontLeftLeg, frontRightLeg, hindLeftLeg, hindRightLeg);
 	}
 	
 	public void setStartPosition(){

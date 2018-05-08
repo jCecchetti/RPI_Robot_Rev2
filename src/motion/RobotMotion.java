@@ -20,22 +20,22 @@ public class RobotMotion {
 	private Leg frontLeftLeg, frontRightLeg, hindLeftLeg, hindRightLeg;
 	private Leg[] legs;
 	
-	public RobotMotion(Leg[] legs){
+	public RobotMotion(Leg frontLeftLeg, Leg frontRightLeg, Leg hindLeftLeg, Leg hindRightLeg){
 		this.legs = legs;
-		legs[0].toString();
-//		frontRightLeg = legs[1];
-//		hindLeftLeg = legs[2];
-//		hindRightLeg = legs[3];
+		this.frontLeftLeg = frontLeftLeg;
+		this.frontRightLeg = frontRightLeg;
+		this.hindLeftLeg = hindLeftLeg;
+		this.hindRightLeg = hindRightLeg;
 	}
 	
 	public void updateGlobalRobotPos(){
 		KeyManager.tick();
-		if(KeyManager.w) globalRobotPos.y += updateRate/robotSpeed;
-		if(KeyManager.s) globalRobotPos.y -= updateRate/robotSpeed;
-		if(KeyManager.d) globalRobotPos.x += updateRate/robotSpeed;
-		if(KeyManager.a) globalRobotPos.x -= updateRate/robotSpeed;
-		if(KeyManager.j) localRobotPos.yaw += updateRate/turningSpeed;
-		if(KeyManager.l) localRobotPos.yaw -= updateRate/turningSpeed;
+		if(KeyManager.w) globalRobotPos.y += robotSpeed/updateRate;
+		if(KeyManager.s) globalRobotPos.y -= robotSpeed/updateRate;
+		if(KeyManager.d) globalRobotPos.x += robotSpeed/updateRate;
+		if(KeyManager.a) globalRobotPos.x -= robotSpeed/updateRate;
+		if(KeyManager.j) localRobotPos.yaw += turningSpeed/updateRate;
+		if(KeyManager.l) localRobotPos.yaw -= turningSpeed/updateRate;
 	}
 	
 	private enum leg{frontLeft, frontRight, rearLeft, rearRight}
@@ -44,10 +44,14 @@ public class RobotMotion {
 	
 	public void handleLegs(){
 		Position[] corners = Body.getGlobalCornerPos(localRobotPos, globalRobotPos);
-		legs[0].setFootPos(Body.getRelativeFootPos(corners[0], globalFeetPos[0]));
-		legs[1].setFootPos(Body.getRelativeFootPos(corners[1], globalFeetPos[1]));
-		legs[2].setFootPos(Body.getRelativeFootPos(corners[2], globalFeetPos[2]));
-		legs[3].setFootPos(Body.getRelativeFootPos(corners[3], globalFeetPos[3]));
+//		legs[0].setFootPos(Body.getRelativeFootPos(corners[0], globalFeetPos[0]));
+//		legs[1].setFootPos(Body.getRelativeFootPos(corners[1], globalFeetPos[1]));
+//		legs[2].setFootPos(Body.getRelativeFootPos(corners[2], globalFeetPos[2]));
+//		legs[3].setFootPos(Body.getRelativeFootPos(corners[3], globalFeetPos[3]));
+		frontLeftLeg.setFootPos(Body.getRelativeFootPos(corners[0], globalFeetPos[0]));
+		frontRightLeg.setFootPos(Body.getRelativeFootPos(corners[1], globalFeetPos[1]));
+		hindLeftLeg.setFootPos(Body.getRelativeFootPos(corners[2], globalFeetPos[2]));
+		hindRightLeg.setFootPos(Body.getRelativeFootPos(corners[3], globalFeetPos[3]));
 		switch(steppingLeg){
 			case frontLeft:
 				

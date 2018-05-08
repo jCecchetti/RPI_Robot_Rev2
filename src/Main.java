@@ -1,3 +1,4 @@
+import input.KeyManager;
 import kinematics.Robot;
 import util.Trig;
 
@@ -11,7 +12,10 @@ public class Main{
 		//mathTest(0,0,-5.0, false);
 		Robot robot = new Robot();
 		robot.start();
-		
+//		for(int i = 0; i < 1000; i++){
+//			KeyManager.tick();
+//			if(KeyManager.w)System.out.print("s");
+//		}
 	
 	}	
 	
