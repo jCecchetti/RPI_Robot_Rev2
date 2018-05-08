@@ -55,22 +55,22 @@ public class Leg {
 	}
 	
 	public void calculateAngles(double x, double y, double z){
-		if(!left) x = -x;
+		if(!left) y = -y;
 		
-		double C = Math.sqrt(z*z + x*x);
+		double C = Math.sqrt(z*z + y*y);
 		
 		double c = 90 + Trig.atan(FEMUR/SERVOWIDTH*2);//Okay
 		double A = Math.sqrt(FEMUR*FEMUR + SERVOWIDTH*SERVOWIDTH/4);
-		if((left && x > 0) || (!left && x > 0)) hipAngle = hipCenter - (180 - c - Trig.asin(A*Trig.sin(c)/C) + Trig.acos(-z/C) - Trig.atan(SERVOWIDTH/FEMUR/2));
+		if((left && y > 0) || (!left && y > 0)) hipAngle = hipCenter - (180 - c - Trig.asin(A*Trig.sin(c)/C) + Trig.acos(-z/C) - Trig.atan(SERVOWIDTH/FEMUR/2));
 		else hipAngle = hipCenter - (180 - c - Trig.asin(A*Trig.sin(c)/C) - Trig.acos(-z/C) - Trig.atan(SERVOWIDTH/FEMUR/2));
 		if(!left){
-			if(x > 0) hipAngle = hipCenter - (hipAngle - hipCenter);
+			if(y > 0) hipAngle = hipCenter - (hipAngle - hipCenter);
 			else hipAngle =  hipCenter + (hipCenter - hipAngle);
 		}
 		double B = C * Trig.sin(180 - c - Trig.asin(A*Trig.sin(c)/C))/Trig.sin(c);
-		double L = Math.sqrt(B*B + y*y);
+		double L = Math.sqrt(B*B + x*x);
 		double absoluteKneeAngle = Trig.acos((L*L + TIBIA*TIBIA - TARSUS*TARSUS)/(2*L*TIBIA));
-		kneeAngle = kneeCenter - (absoluteKneeAngle - Trig.atan2(y, B));
+		kneeAngle = kneeCenter - (absoluteKneeAngle - Trig.atan2(x, B));
 		if(left) ankleAngle = ankleCenter + (180 - Trig.acos((TIBIA*TIBIA + TARSUS*TARSUS - L*L)/(2*TIBIA*TARSUS)));
 		else ankleAngle = 180 - (ankleCenter + (180 - Trig.acos((TIBIA*TIBIA + TARSUS*TARSUS - L*L)/(2*TIBIA*TARSUS))));
 

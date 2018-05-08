@@ -10,10 +10,10 @@ public class Body {
 	private static Position[] globalCornerPos = {new Position(0,0,0,0,0,0),new Position(0,0,0,0,0,0),new Position(0,0,0,0,0,0),new Position(0,0,0,0,0,0)};
 	
 	public static Position[] getLocalCornerPos(Position localBodyPos){
-		double[][] unrotatedLocalCornerPos = {{-Constants.BODYWIDTH/2, Constants.BODYLENGTH/2, 0},
-										{Constants.BODYWIDTH/2, Constants.BODYLENGTH/2, 0},
-										{-Constants.BODYWIDTH/2, -Constants.BODYLENGTH/2, 0},
-										{Constants.BODYWIDTH/2, -Constants.BODYLENGTH/2, 0}};
+		double[][] unrotatedLocalCornerPos = {{Constants.BODYLENGTH/2, Constants.BODYWIDTH/2, 0},
+										{Constants.BODYLENGTH/2, -Constants.BODYWIDTH/2, 0},
+										{-Constants.BODYLENGTH/2, Constants.BODYWIDTH/2, 0},
+										{-Constants.BODYLENGTH/2, -Constants.BODYWIDTH/2, 0}};
 		
 		double[][] rollRotationMatrix = {{Math.cos(localBodyPos.roll), 0, -Math.sin(localBodyPos.roll)},
 										 {0, 1, 0},

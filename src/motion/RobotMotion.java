@@ -9,11 +9,11 @@ import util.Position;
 public class RobotMotion {
 	
 	private Position globalRobotPos = new Position(0,0,5.0,0,0,0);
-	private Position localRobotPos = new Position(0,0,5.0,0,0,0);
-	private Position[] globalFeetPos = {new Position(-Constants.BODYWIDTH/2, Constants.BODYLENGTH/2, 0,0,0,0),
-			new Position(Constants.BODYWIDTH/2, Constants.BODYLENGTH/2, 0,0,0,0),
-			new Position(-Constants.BODYWIDTH/2, -Constants.BODYLENGTH/2, 0,0,0,0),
-			new Position(Constants.BODYWIDTH/2, -Constants.BODYLENGTH/2, 0,0,0,0)};
+	private Position localRobotPos = new Position(0,0,0,0,0,0);
+	private Position[] globalFeetPos = {new Position(Constants.BODYLENGTH/2, Constants.BODYWIDTH/2, 0,0,0,0),
+			new Position(Constants.BODYLENGTH/2, -Constants.BODYWIDTH/2, 0,0,0,0),
+			new Position(-Constants.BODYLENGTH/2, Constants.BODYWIDTH/2, 0,0,0,0),
+			new Position(-Constants.BODYLENGTH/2, -Constants.BODYWIDTH/2, 0,0,0,0)};
 	private double robotSpeed = 1;// in/s
 	private double turningSpeed = 45;// degrees/s
 	private double updateRate = Constants.UPDATESPERSECOND;
