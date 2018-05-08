@@ -8,8 +8,8 @@ import util.Position;
 
 public class RobotMotion {
 	
-	private Position globalRobotPos = new Position(0,0,0,0,0,0);
-	private Position localRobotPos = new Position(0,0,0,0,0,0);
+	private Position globalRobotPos = new Position(0,0,5.0,0,0,0);
+	private Position localRobotPos = new Position(0,0,5.0,0,0,0);
 	private Position[] globalFeetPos = {new Position(-Constants.BODYWIDTH/2, Constants.BODYLENGTH/2, 0,0,0,0),
 			new Position(Constants.BODYWIDTH/2, Constants.BODYLENGTH/2, 0,0,0,0),
 			new Position(-Constants.BODYWIDTH/2, -Constants.BODYLENGTH/2, 0,0,0,0),
