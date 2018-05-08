@@ -8,8 +8,6 @@ public class Main{
 	
 
 	public static void main(String[] args) {
-		Position[] corners = Body.getGlobalCornerPos(localRobotPos, globalRobotPos);
-		Body.getRelativeFootPos(corners[0], globalFeetPos[0]);
 		//mathTest(0,0,-5.0, true);
 		//mathTest(0,0,-5.0, false);
 		Robot robot = new Robot();
