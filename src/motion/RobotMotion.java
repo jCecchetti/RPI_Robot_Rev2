@@ -111,7 +111,7 @@ public class RobotMotion {
 				}
 			break;
 			case rearRight:
-				localRobotPos.y = -1;
+				localRobotPos.y = 1;
 				if(timer.get() < .25){
 					globalFeetPos[3].x = lastGlobalCornerPos[3].x + stepLength/2;
 					globalFeetPos[3].z = stepHeight;
