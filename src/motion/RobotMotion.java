@@ -55,7 +55,8 @@ public class RobotMotion {
 		hindRightLeg.setFootPos(Body.getRelativeFootPos(corners[3], globalFeetPos[3]));
 		switch(steppingLeg){
 			case frontLeft:
-				
+				if(globalRobotPos.x < 2) globalRobotPos.x += robotSpeed/updateRate;
+				else steppingLeg = leg.rearLeft;
 			break;
 			case rearLeft:
 				

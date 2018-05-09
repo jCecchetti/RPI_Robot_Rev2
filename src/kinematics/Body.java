@@ -47,7 +47,6 @@ public class Body {
 	
 	public static Position getRelativeFootPos(Position globalCornerPos, Position globalFootPos){
 		double x = globalFootPos.x - globalCornerPos.x;
-		System.out.println(globalFootPos.x + "-" + globalCornerPos.x);
 		double y = globalFootPos.y - globalCornerPos.y;
 		double z = globalFootPos.z - globalCornerPos.z;
 		Position relativeFootPos = new Position(x,y,z,0,0,0);
