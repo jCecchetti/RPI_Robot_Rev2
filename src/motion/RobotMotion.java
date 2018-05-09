@@ -81,14 +81,16 @@ public class RobotMotion {
 				}
 			break;
 			case rearLeft:
-				localRobotPos.y = -.5;
+				
 				if(timer.get() < .25){
 					globalFeetPos[2].x = lastGlobalCornerPos[2].x + stepLength/2;
 					globalFeetPos[2].z = stepHeight;
+					localRobotPos.y = -.5;
 				}
 				else if(timer.get() < 1){
 					globalFeetPos[2].x = lastGlobalCornerPos[2].x + stepLength;
 					globalFeetPos[2].z = 0;
+					localRobotPos.y = .5;
 				}
 				else{
 					steppingLeg = leg.frontRight;
