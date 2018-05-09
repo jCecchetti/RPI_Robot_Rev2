@@ -1,6 +1,7 @@
 package kinematics;
 
 import adafruithat.AdafruitServo;
+import util.Constants;
 import util.Position;
 import util.Trig;
 
@@ -44,13 +45,19 @@ public class Leg {
 		this.left = left;
 	}
 	
+	public Leg(boolean left){
+		this.left = left;
+	}
+	
 	public boolean setFootPos(Position pos){
 		calculateAngles(pos.x, pos.y, pos.z);
 		//System.out.println(pos.x + " " + pos.y + " " + pos.z);
-		servo1.setPosition((float) hipAngle);
-		servo2.setPosition((float) kneeAngle);
-		servo3.setPosition((float) ankleAngle);
-
+		if(!Constants.SIMULATION){
+			servo1.setPosition((float) hipAngle);
+			servo2.setPosition((float) kneeAngle);
+			servo3.setPosition((float) ankleAngle);
+		}
+		
 		return true;
 	}
 	

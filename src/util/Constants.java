@@ -7,5 +7,7 @@ public class Constants {
 	
 	public static final double UPDATESPERSECOND = 30;
 	
+	public static final boolean SIMULATION = true;
+	
 	
 }

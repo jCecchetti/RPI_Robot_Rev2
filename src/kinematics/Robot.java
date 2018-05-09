@@ -18,11 +18,19 @@ public class Robot extends Thread{
 	private RobotMotion motion;
 	
 	public Robot(){
-		servoHat = new AdafruitServoHat(servoHATAddress);
-		frontLeftLeg = new Leg(servoHat.getServo("S13"), servoHat.getServo("S14"), servoHat.getServo("S15"), true);
-		frontRightLeg = new Leg(servoHat.getServo("S09"), servoHat.getServo("S10"), servoHat.getServo("S11"), false);
-		hindLeftLeg = new Leg(servoHat.getServo("S05"), servoHat.getServo("S06"), servoHat.getServo("S07"), true);
-		hindRightLeg = new Leg(servoHat.getServo("S01"), servoHat.getServo("S02"), servoHat.getServo("S03"), false);
+		if(!Constants.SIMULATION) {
+			servoHat = new AdafruitServoHat(servoHATAddress);
+			frontLeftLeg = new Leg(servoHat.getServo("S13"), servoHat.getServo("S14"), servoHat.getServo("S15"), true);
+			frontRightLeg = new Leg(servoHat.getServo("S09"), servoHat.getServo("S10"), servoHat.getServo("S11"), false);
+			hindLeftLeg = new Leg(servoHat.getServo("S05"), servoHat.getServo("S06"), servoHat.getServo("S07"), true);
+			hindRightLeg = new Leg(servoHat.getServo("S01"), servoHat.getServo("S02"), servoHat.getServo("S03"), false);
+		}
+		else{
+			frontLeftLeg = new Leg(true);
+			frontRightLeg = new Leg(false);
+			hindLeftLeg = new Leg(true);
+			hindRightLeg = new Leg(false);
+		}
 //		legs[0] = frontLeftLeg;
 //		legs[1] = frontRightLeg;
 //		legs[2] = hindLeftLeg;
@@ -88,7 +96,7 @@ public class Robot extends Thread{
 				}
 				
 				if(timer >= 1000000000){
-					System.out.println("Ticks and Frames " + ticks);
+					//System.out.println("Ticks and Frames " + ticks);
 					timer = 0;
 					ticks = 0;
 					totalSeconds++;
