@@ -1,11 +1,22 @@
 package kinematics;
 
+import java.awt.Graphics;
+import java.awt.image.BufferStrategy;
+
 import adafruithat.AdafruitServoHat;
+import input.KeyManager;
 import motion.RobotMotion;
+import simulationdisplay.Display;
 import util.Constants;
 import util.Position;
 
 public class Robot extends Thread{
+	
+	private Display display;
+	public String title = "Quadruped Simulation";	
+	private BufferStrategy bs;
+	private Graphics g;
+	private KeyManager keyManager;
 	
 	AdafruitServoHat servoHat;
 	final int servoHATAddress = 0X40;
@@ -36,19 +47,17 @@ public class Robot extends Thread{
 //		legs[2] = hindLeftLeg;
 //		legs[3] = hindRightLeg;
 		motion = new RobotMotion(frontLeftLeg, frontRightLeg, hindLeftLeg, hindRightLeg);
+		keyManager = new KeyManager();
 	}
 	
 	public void setStartPosition(){
-		//frontLeftLeg.calculateAngles(0.0, 0.0, -4.0);
-		//frontLeftLeg.setFootPos(legPos[0]);
-		//frontRightLeg.setFootPos(legPos[0]);
-		//hindLeftLeg.setFootPos(legPos[0]);
-		//hindRightLeg.setFootPos(legPos[0]);
 		
 	}
 	
 	public void init(){
 		setStartPosition();
+		display = new Display(title, Constants.SIMWIDTH, Constants.SIMHEIGHT);
+		display.getFrame().addKeyListener(keyManager);
 	}
 	
 	public void stopRobot(){
@@ -56,11 +65,27 @@ public class Robot extends Thread{
 	}
 	
 	public void update(){
+		keyManager.tick();
 		motion.handleLegs();
 	}
 	
 	public void render(){
+		bs = display.getCanvas().getBufferStrategy();
+		if(bs == null){
+			display.getCanvas().createBufferStrategy(3);
+			return;
+		}
+		g = bs.getDrawGraphics();
+		//Clear Screen
+		g.clearRect(0, 0, Constants.SIMWIDTH, Constants.SIMHEIGHT);
+
+		//Draw Coordinate Axes
+		g.drawLine(0, Constants.y0, Constants.SIMWIDTH, Constants.y0);
+		g.drawLine(Constants.x0, 0, Constants.x0, Constants.SIMHEIGHT);
+		motion.render(g);
 		
+		bs.show();
+		g.dispose();
 	}
 	
 	public Position calcNewRobotPos(){
@@ -92,7 +117,7 @@ public class Robot extends Thread{
 					render();
 					ticks++;
 					delta--;
-					if(totalSeconds > 10) running = false;
+					if(motion.end) running = false;
 				}
 				
 				if(timer >= 1000000000){
@@ -107,5 +132,7 @@ public class Robot extends Thread{
 			
 			stopRobot();
 	}
+	
+	
 
 }
