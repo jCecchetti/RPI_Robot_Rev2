@@ -9,7 +9,7 @@ import util.Timer;
 
 public class RobotMotion {
 	
-	private Position globalRobotPos = new Position(0,0,7.0,0,0,0);
+	private Position globalRobotPos = new Position(0,0,6.5,0,0,0);
 	private Position localRobotPos = new Position(0,0,0,0,0,0);
 	private Position[] globalFeetPos = {new Position(Constants.BODYLENGTH/2, Constants.BODYWIDTH/2 + 1, 0,0,0,0),
 			new Position(Constants.BODYLENGTH/2, -Constants.BODYWIDTH/2 - 1, 0,0,0,0),
