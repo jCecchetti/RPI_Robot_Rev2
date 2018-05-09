@@ -6,6 +6,7 @@ import kinematics.Leg;
 import util.Constants;
 import util.Position;
 import util.Timer;
+import util.Trig;
 
 public class RobotMotion {
 	
@@ -113,14 +114,16 @@ public class RobotMotion {
 				}
 			break;
 			case rearRight:
-				localRobotPos.y = .5;
+				
 				if(timer.get() < .25){
 					globalFeetPos[3].x = lastGlobalCornerPos[3].x + stepLength/2;
 					globalFeetPos[3].z = stepHeight;
+					localRobotPos.y = .5;
 				}
 				else if(timer.get() < 1){
 					globalFeetPos[3].x = lastGlobalCornerPos[3].x + stepLength;
 					globalFeetPos[3].z = 0;
+					localRobotPos.y = -.5;
 				}
 				else{
 					steppingLeg = leg.frontLeft;
