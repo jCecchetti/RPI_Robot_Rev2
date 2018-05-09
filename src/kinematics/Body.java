@@ -31,7 +31,7 @@ public class Body {
 			double[] rotatedLocalCornerPos = unrotatedLocalCornerPos[i];//Matrix.multiply(yawRotationMatrix, unrotatedLocalCornerPos[i]);
 			localCornerPos[i] = new Position(rotatedLocalCornerPos[0] + localBodyPos.x, rotatedLocalCornerPos[1] + localBodyPos.y,
 					rotatedLocalCornerPos[2] + localBodyPos.z, localBodyPos.roll, localBodyPos.pitch, localBodyPos.yaw);
-			System.out.println(rotatedLocalCornerPos[0]);
+			//System.out.println(rotatedLocalCornerPos[0]);
 		}
 		return localCornerPos;
 	}
@@ -39,8 +39,8 @@ public class Body {
 	public static Position[] getGlobalCornerPos(Position localBodyPos, Position globalBodyPos){
 		Position[] untranslatedCornerPos = getLocalCornerPos(localBodyPos);
 		for(int i = 0; i < 4; i++){
-			globalCornerPos[i] = new Position(untranslatedCornerPos[0].x + globalBodyPos.x, untranslatedCornerPos[1].y + globalBodyPos.y,
-					untranslatedCornerPos[2].z + globalBodyPos.z, localBodyPos.roll, localBodyPos.pitch, localBodyPos.yaw);
+			globalCornerPos[i] = new Position(untranslatedCornerPos[i].x + globalBodyPos.x, untranslatedCornerPos[i].y + globalBodyPos.y,
+					untranslatedCornerPos[i].z + globalBodyPos.z, localBodyPos.roll, localBodyPos.pitch, localBodyPos.yaw);
 		}
 		return globalCornerPos;
 	}
