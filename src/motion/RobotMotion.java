@@ -76,6 +76,7 @@ public class RobotMotion {
 				}
 				else{
 					steppingLeg = leg.rearLeft;
+					timer.reset();
 				}
 			break;
 			case rearLeft:
@@ -89,6 +90,7 @@ public class RobotMotion {
 				}
 				else{
 					steppingLeg = leg.frontRight;
+					timer.reset();
 				}
 			break;
 			case frontRight:
@@ -102,6 +104,7 @@ public class RobotMotion {
 				}
 				else{
 					steppingLeg = leg.rearRight;
+					timer.reset();
 				}
 			break;
 			case rearRight:
@@ -115,6 +118,7 @@ public class RobotMotion {
 				}
 				else{
 					steppingLeg = leg.frontLeft;
+					timer.reset();
 				}
 			break;
 		}
