@@ -66,7 +66,7 @@ public class RobotMotion {
 		globalRobotPos.x += robotSpeed/updateRate;
 		switch(steppingLeg){
 			case frontLeft:
-				localRobotPos.y = -1;
+				localRobotPos.y = -.5;
 				if(timer.get() < .25){
 					globalFeetPos[0].x = lastGlobalCornerPos[0].x + stepLength/2;
 					globalFeetPos[0].z = stepHeight;
@@ -81,7 +81,7 @@ public class RobotMotion {
 				}
 			break;
 			case rearLeft:
-				localRobotPos.y = -1;
+				localRobotPos.y = -.5;
 				if(timer.get() < .25){
 					globalFeetPos[2].x = lastGlobalCornerPos[2].x + stepLength/2;
 					globalFeetPos[2].z = stepHeight;
@@ -96,7 +96,7 @@ public class RobotMotion {
 				}
 			break;
 			case frontRight:
-				localRobotPos.y = 1;
+				localRobotPos.y = .5;
 				if(timer.get() < .25){
 					globalFeetPos[1].x = lastGlobalCornerPos[1].x + stepLength/2;
 					globalFeetPos[1].z = stepHeight;
@@ -111,7 +111,7 @@ public class RobotMotion {
 				}
 			break;
 			case rearRight:
-				localRobotPos.y = 1;
+				localRobotPos.y = .5;
 				if(timer.get() < .25){
 					globalFeetPos[3].x = lastGlobalCornerPos[3].x + stepLength/2;
 					globalFeetPos[3].z = stepHeight;
