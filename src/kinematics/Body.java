@@ -45,6 +45,11 @@ public class Body {
 		return globalCornerPos;
 	}
 	
+	public static Position getGlobalCoMPos(Position localBodyPos, Position globalBodyPos){
+		Position globalCoMPos = new Position(globalBodyPos.x + localBodyPos.x, globalBodyPos.y + localBodyPos.y, globalBodyPos.z + localBodyPos.z, 0, 0, 0);
+		return globalCoMPos;
+	}
+	
 	public static Position getRelativeFootPos(Position globalCornerPos, Position globalFootPos){
 		double x = globalFootPos.x - globalCornerPos.x;
 		double y = globalFootPos.y - globalCornerPos.y;

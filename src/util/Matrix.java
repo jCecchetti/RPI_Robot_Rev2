@@ -28,5 +28,9 @@ public class Matrix {
                     c[i][j] += a[i][k] * b[k][j];
         return c;
     }
+    
+    public static double determinate(double x0, double y0, double x1, double y1){
+    	return x0*y1 - x1*y0;
+    }
 
 }

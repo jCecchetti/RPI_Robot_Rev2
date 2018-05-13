@@ -29,12 +29,13 @@ public class RobotMotion {
 			new Position(-Constants.BODYLENGTH/2, -Constants.BODYWIDTH/2, 0,0,0,0)};
 
 	private double robotSpeed = 1;// in/s
+	private double currentRobotSpeed = 0;
 	private double turningSpeed = 45;// degrees/s
 	private double updateRate = Constants.UPDATESPERSECOND;
 	private Leg frontLeftLeg, frontRightLeg, hindLeftLeg, hindRightLeg;
 	private Leg[] legs;
 	private double stepTime = 1.0;
-	private double stepLength = 2;
+	private double stepLength = 0;
 	private double stepHeight = 1;
 	private Timer timer = new Timer();
 	public boolean end = false;
@@ -49,8 +50,15 @@ public class RobotMotion {
 	
 	public void updateGlobalRobotPos(){
 		KeyManager.tick();
-		if(KeyManager.w) globalRobotPos.x += robotSpeed/updateRate;
-		if(KeyManager.s) globalRobotPos.x -= robotSpeed/updateRate;
+		if(KeyManager.w) {
+			globalRobotPos.x += robotSpeed/updateRate;
+			currentRobotSpeed = robotSpeed; 
+		}
+		else if(KeyManager.s) {
+			globalRobotPos.x -= robotSpeed/updateRate;
+			currentRobotSpeed = -robotSpeed; 
+		}
+		else currentRobotSpeed = 0; 
 		if(KeyManager.d) globalRobotPos.y += robotSpeed/updateRate;
 		if(KeyManager.a) globalRobotPos.y -= robotSpeed/updateRate;
 		if(KeyManager.j) localRobotPos.yaw += turningSpeed/updateRate;
@@ -75,11 +83,13 @@ public class RobotMotion {
 		hindLeftLeg.setFootPos(Body.getRelativeFootPos(globalCornerPos[2], globalFeetPos[2]));
 		hindRightLeg.setFootPos(Body.getRelativeFootPos(globalCornerPos[3], globalFeetPos[3]));
 		//globalRobotPos.x += robotSpeed/updateRate;
+		stepLength = currentRobotSpeed*stepTime*2.0;
 		switch(steppingLeg){
 			case frontLeft:
 				localRobotPos.y = -.5;
+				localRobotPos.x = -.5;
 				if(timer.get() < .25){
-					globalFeetPos[0].x = lastGlobalCornerPos[0].x + stepLength/2;
+					globalFeetPos[0].x = lastGlobalCornerPos[0].x;
 					globalFeetPos[0].z = stepHeight;
 				}
 				else if(timer.get() < 1){
@@ -90,28 +100,31 @@ public class RobotMotion {
 					steppingLeg = leg.rearLeft;
 					timer.reset();
 				}
+				//if(HandleCoM.CoMStable(diagonalLeg1, diagonalLeg2, farLeg, CoMPos) 
 			break;
 			case rearLeft:
-				
+				localRobotPos.y = -.5;
+				localRobotPos.x = .5;
 				if(timer.get() < .25){
-					globalFeetPos[2].x = lastGlobalCornerPos[2].x + stepLength/2;
+					globalFeetPos[2].x = lastGlobalCornerPos[2].x;
 					globalFeetPos[2].z = stepHeight;
-					localRobotPos.y = -.5;
+					//localRobotPos.y = -.5;
 				}
 				else if(timer.get() < 1){
 					globalFeetPos[2].x = lastGlobalCornerPos[2].x + stepLength;
 					globalFeetPos[2].z = 0;
-					localRobotPos.y = .5;
+					//localRobotPos.y = .5;
 				}
 				else{
-					steppingLeg = leg.frontRight;
+					steppingLeg = leg.rearRight;
 					timer.reset();
 				}
 			break;
 			case frontRight:
 				localRobotPos.y = .5;
+				localRobotPos.x = -.5;
 				if(timer.get() < .25){
-					globalFeetPos[1].x = lastGlobalCornerPos[1].x + stepLength/2;
+					globalFeetPos[1].x = lastGlobalCornerPos[1].x;
 					globalFeetPos[1].z = stepHeight;
 				}
 				else if(timer.get() < 1){
@@ -119,24 +132,25 @@ public class RobotMotion {
 					globalFeetPos[1].z = 0;
 				}
 				else{
-					steppingLeg = leg.rearRight;
+					steppingLeg = leg.frontLeft;
 					timer.reset();
 				}
 			break;
 			case rearRight:
-				
+				localRobotPos.y = .5;
+				localRobotPos.x = .5;
 				if(timer.get() < .25){
-					globalFeetPos[3].x = lastGlobalCornerPos[3].x + stepLength/2;
+					globalFeetPos[3].x = lastGlobalCornerPos[3].x;
 					globalFeetPos[3].z = stepHeight;
-					localRobotPos.y = .5;
+					//localRobotPos.y = .5;
 				}
 				else if(timer.get() < 1){
 					globalFeetPos[3].x = lastGlobalCornerPos[3].x + stepLength;
 					globalFeetPos[3].z = 0;
-					localRobotPos.y = -.5;
+					//localRobotPos.y = -.5;
 				}
 				else{
-					steppingLeg = leg.frontLeft;
+					steppingLeg = leg.frontRight;
 					timer.reset();
 				}
 			break;
@@ -151,6 +165,24 @@ public class RobotMotion {
 		int ypos[] = {(int) (globalCornerPos[0].y*Constants.PixelsPerIn + Constants.y0), (int) (globalCornerPos[1].y*Constants.PixelsPerIn + Constants.y0),
 				(int) (globalCornerPos[3].y*Constants.PixelsPerIn + Constants.y0), (int) (globalCornerPos[2].y*Constants.PixelsPerIn + Constants.y0)};
 		
+		int[] xposTri = {0,0,0,0};
+		int[] yposTri = {0,0,0,0};
+		
+		for(int i = 0; i < 4; i++){
+			if(i != getSteppingLegNum()){
+				xposTri[i] = (int) (globalFeetPos[i].x*Constants.PixelsPerIn + Constants.x0);
+				yposTri[i] = (int) (globalFeetPos[i].y*Constants.PixelsPerIn + Constants.y0);
+			}
+			else if(getSteppingLegNum() != 0){
+				xposTri[i] = (int) (globalFeetPos[i-1].x*Constants.PixelsPerIn + Constants.x0);
+				yposTri[i] = (int) (globalFeetPos[i-1].y*Constants.PixelsPerIn + Constants.y0);
+			}
+			else{
+				xposTri[i] = (int) (globalFeetPos[i+1].x*Constants.PixelsPerIn + Constants.x0);
+				yposTri[i] = (int) (globalFeetPos[i+1].y*Constants.PixelsPerIn + Constants.y0);
+			}
+		}
+		
 		//Draw the rotated rectangle
 		g.setColor(Color.gray);
 		g.fillPolygon(xpos, ypos, 4);
@@ -161,6 +193,20 @@ public class RobotMotion {
 		g.fillOval((int) (globalFeetPos[1].x*Constants.PixelsPerIn + Constants.x0), (int) (globalFeetPos[1].y*Constants.PixelsPerIn + Constants.y0), 10, 10);
 		g.fillOval((int) (globalFeetPos[2].x*Constants.PixelsPerIn + Constants.x0), (int) (globalFeetPos[2].y*Constants.PixelsPerIn + Constants.y0), 10, 10);
 		g.fillOval((int) (globalFeetPos[3].x*Constants.PixelsPerIn + Constants.x0), (int) (globalFeetPos[3].y*Constants.PixelsPerIn + Constants.y0), 10, 10);
+		g.drawPolygon(xposTri, yposTri, 4);
+		if(steppingLeg == leg.frontLeft && HandleCoM.CoMStable(globalFeetPos[1], globalFeetPos[2], globalFeetPos[3], Body.getGlobalCoMPos(localRobotPos, globalRobotPos))) g.setColor(Color.WHITE);
+		else if(steppingLeg == leg.frontRight && HandleCoM.CoMStable(globalFeetPos[0], globalFeetPos[2], globalFeetPos[3], Body.getGlobalCoMPos(localRobotPos, globalRobotPos))) g.setColor(Color.WHITE);
+		else if(steppingLeg == leg.rearLeft && HandleCoM.CoMStable(globalFeetPos[0], globalFeetPos[1], globalFeetPos[3], Body.getGlobalCoMPos(localRobotPos, globalRobotPos))) g.setColor(Color.WHITE);
+		else if(steppingLeg == leg.rearRight && HandleCoM.CoMStable(globalFeetPos[0], globalFeetPos[1], globalFeetPos[2], Body.getGlobalCoMPos(localRobotPos, globalRobotPos))) g.setColor(Color.WHITE);
+		g.fillOval((int) (Body.getGlobalCoMPos(localRobotPos, globalRobotPos).x*Constants.PixelsPerIn + Constants.x0),
+				(int) (Body.getGlobalCoMPos(localRobotPos, globalRobotPos).y*Constants.PixelsPerIn + Constants.y0), 10, 10);
+	}
+	
+	public int getSteppingLegNum(){
+		if(steppingLeg == leg.frontLeft) return 0;
+		else if(steppingLeg == leg.frontRight) return 1;
+		else if(steppingLeg == leg.rearLeft) return 2;
+		else return 3;
 	}
 
 }
