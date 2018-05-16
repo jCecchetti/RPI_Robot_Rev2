@@ -43,7 +43,7 @@ public class RobotMotion {
 	private double stepTime = 1.0;
 	private double stepLengthX = 0;
 	private double stepLengthY = 0;
-	private double stepHeight = 1.5;
+	private double stepHeight = 1;
 	private Timer timer = new Timer();
 	public boolean end = false;
 
