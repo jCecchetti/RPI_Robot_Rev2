@@ -4,7 +4,7 @@ public class Constants {
 	
 	public static final double BODYLENGTH = 13.0;
 	public static final double BODYWIDTH = 8.0;
-	public static final double COMBOX = .55;
+	public static final double COMBOX = .25;
 	public static final double UPDATESPERSECOND = 30.0;
 	
 	public static final boolean SIMULATION = false;
