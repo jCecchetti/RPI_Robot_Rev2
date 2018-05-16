@@ -153,14 +153,21 @@ public class RobotMotion {
 	}
 	
 	public void handleTrottingLegs(){
-		updateGlobalRobotPos();
+		//updateGlobalRobotPos();
 		globalCornerPos = Body.getGlobalCornerPos(localRobotPos, globalRobotPos);
 		frontLeftLeg.setFootPos(Body.getRelativeFootPos(globalCornerPos[0], globalFeetPos[0]));
 		frontRightLeg.setFootPos(Body.getRelativeFootPos(globalCornerPos[1], globalFeetPos[1]));
 		hindLeftLeg.setFootPos(Body.getRelativeFootPos(globalCornerPos[2], globalFeetPos[2]));
 		hindRightLeg.setFootPos(Body.getRelativeFootPos(globalCornerPos[3], globalFeetPos[3]));
-		if(globalRobotPos.x < 15) globalRobotPos.x += robotSpeed/updateRate;
-		else if(globalRobotPos.y < 15) globalRobotPos.y += robotSpeed/updateRate;
+		if(globalRobotPos.x < 15) {
+			globalRobotPos.x += robotSpeed/updateRate;
+			currentRobotSpeedX = robotSpeed;
+		}
+		else if(globalRobotPos.y < 15){
+			globalRobotPos.y += robotSpeed/updateRate;
+			currentRobotSpeedY = robotSpeed;
+		}
+		else localRobotPos.yaw += turningSpeed/updateRate;
 		stepLengthX = currentRobotSpeedX*stepTime*2.0;
 		stepLengthY = currentRobotSpeedY*stepTime*2.0;
 		switch(steppingLeg){
