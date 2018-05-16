@@ -20,7 +20,13 @@ public class Display {
 		createDisplay();
 	}
 	
+	public Display(){
+		canvas = new Canvas();
+		canvas.setFocusable(true);
+	}
+	
 	private void createDisplay(){
+		java.awt.GraphicsEnvironment.isHeadless();
 		frame = new JFrame(title);
 		frame.setSize(width, height);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
