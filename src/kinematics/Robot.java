@@ -56,8 +56,8 @@ public class Robot extends Thread{
 	
 	public void init(){
 		setStartPosition();
-		display = new Display(title, Constants.SIMWIDTH, Constants.SIMHEIGHT);
-		display.getFrame().addKeyListener(keyManager);
+		if(Constants.SIMULATION) display = new Display(title, Constants.SIMWIDTH, Constants.SIMHEIGHT);
+		if(Constants.SIMULATION) display.getFrame().addKeyListener(keyManager);
 	}
 	
 	public void stopRobot(){
@@ -113,7 +113,7 @@ public class Robot extends Thread{
 				
 				if(delta >= 1){
 					update();
-					render();
+					if(Constants.SIMULATION) render();
 					ticks++;
 					delta--;
 					if(motion.end) running = false;
