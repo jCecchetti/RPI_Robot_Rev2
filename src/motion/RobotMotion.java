@@ -129,12 +129,12 @@ public class RobotMotion {
 			globalRobotPos.x += robotSpeed/updateRate;
 			currentRobotSpeedX = robotSpeed;
 			//localRobotPos.yaw += turningSpeed/updateRate;
-			System.out.println(globalRobotPos.x);
+			//System.out.println(globalRobotPos.x);
 		}
 		else if(globalRobotPos.y < 25){
 			globalRobotPos.y += robotSpeed/updateRate;
 			currentRobotSpeedY = robotSpeed;
-			System.out.println(globalRobotPos.y);
+			//System.out.println(globalRobotPos.y);
 		}
 		//localRobotPos.yaw += turningSpeed/updateRate;
 		stepLengthX = currentRobotSpeedX*stepTime*2.0;
@@ -276,6 +276,7 @@ public class RobotMotion {
 			startedStepping = true;
 			if(stepTimer.get() < .25){
 				globalFeetPos[leg].z = stepHeight;
+				System.out.println("lifting");
 			}
 			if(stepTimer.get() < .5){
 				globalFeetPos[leg].x = lastGlobalStepCenter[leg].x + stepLengthX;
