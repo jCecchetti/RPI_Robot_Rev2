@@ -136,7 +136,7 @@ public class RobotMotion {
 			currentRobotSpeedY = robotSpeed;
 			//System.out.println(globalRobotPos.y);
 		}
-		localRobotPos.yaw += turningSpeed/updateRate;
+		//localRobotPos.yaw += turningSpeed/updateRate;
 		stepLengthX = currentRobotSpeedX*stepTime*2.0;
 		stepLengthY = currentRobotSpeedY*stepTime*2.0;
 		switch(steppingLeg){
