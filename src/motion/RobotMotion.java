@@ -118,7 +118,7 @@ public class RobotMotion {
 	private Step step = new Step(0);
 	
 	public void handleWalkingLegs(){
-		//updateGlobalRobotPos();
+		updateGlobalRobotPos();
 		globalStepCenter = Body.getGlobalStepCenter(localRobotPos, globalRobotPos);
 		globalCornerPos = Body.getGlobalCornerPos(localRobotPos, globalRobotPos);
 		frontLeftLeg.setFootPos(Body.getRelativeFootPos(globalCornerPos[0], globalFeetPos[0]));
