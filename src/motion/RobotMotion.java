@@ -162,10 +162,12 @@ public class RobotMotion {
 		if(globalRobotPos.x < 15) {
 			globalRobotPos.x += robotSpeed/updateRate;
 			currentRobotSpeedX = robotSpeed;
+			System.out.println(globalRobotPos.x);
 		}
 		else if(globalRobotPos.y < 15){
 			globalRobotPos.y += robotSpeed/updateRate;
 			currentRobotSpeedY = robotSpeed;
+			System.out.println(globalRobotPos.y);
 		}
 		else localRobotPos.yaw += turningSpeed/updateRate;
 		stepLengthX = currentRobotSpeedX*stepTime*2.0;
