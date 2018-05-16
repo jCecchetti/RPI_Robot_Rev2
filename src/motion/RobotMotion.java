@@ -29,7 +29,7 @@ public class RobotMotion {
 			new Position(-Constants.BODYLENGTH/2, Constants.BODYWIDTH/2, 0,0,0,0),
 			new Position(-Constants.BODYLENGTH/2, -Constants.BODYWIDTH/2, 0,0,0,0)};
 
-	private double robotSpeed = 1.0;// in/s
+	private double robotSpeed = .5;// in/s
 	private double currentRobotSpeedX = 0;
 	private double currentRobotSpeedY = 0;
 	private double turningSpeed = 10.0;// degrees/s
