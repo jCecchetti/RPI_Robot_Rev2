@@ -8,6 +8,7 @@ public class Body {
 	
 	private static Position[] localCornerPos = {new Position(0,0,0,0,0,0),new Position(0,0,0,0,0,0),new Position(0,0,0,0,0,0),new Position(0,0,0,0,0,0)};
 	private static Position[] globalCornerPos = {new Position(0,0,0,0,0,0),new Position(0,0,0,0,0,0),new Position(0,0,0,0,0,0),new Position(0,0,0,0,0,0)};
+	private static Position[] globalStepCenter = {new Position(0,0,0,0,0,0),new Position(0,0,0,0,0,0),new Position(0,0,0,0,0,0),new Position(0,0,0,0,0,0)};
 	private static double[][] localCoMBox = {{Constants.COMBOX, Constants.COMBOX, 0},
 											{Constants.COMBOX, -Constants.COMBOX, 0},
 											{-Constants.COMBOX, Constants.COMBOX, 0},
@@ -47,6 +48,26 @@ public class Body {
 					untranslatedCornerPos[i].z + globalBodyPos.z, localBodyPos.roll, localBodyPos.pitch, localBodyPos.yaw);
 		}
 		return globalCornerPos;
+	}
+	
+	public static Position[] getGlobalStepCenter(Position localBodyPos, Position globalBodyPos){
+		
+		double[][] unrotatedStepCenter = {{Constants.BODYLENGTH/2, Constants.BODYWIDTH/2, 0},
+				{Constants.BODYLENGTH/2, -Constants.BODYWIDTH/2, 0},
+				{-Constants.BODYLENGTH/2, Constants.BODYWIDTH/2, 0},
+				{-Constants.BODYLENGTH/2, -Constants.BODYWIDTH/2, 0}};
+		
+		double[][] yawRotationMatrix = {{Math.cos(Math.toRadians(localBodyPos.yaw)), -Math.sin(Math.toRadians(localBodyPos.yaw)), 0},
+				{Math.sin(Math.toRadians(localBodyPos.yaw)), Math.cos(Math.toRadians(localBodyPos.yaw)), 0},
+				{0, 0, 1}};
+		
+		for(int i = 0; i < 4; i++){
+			double[] rotatedStepCenter = Matrix.multiply(yawRotationMatrix, unrotatedStepCenter[i]);
+			globalStepCenter[i] = new Position(rotatedStepCenter[0] + globalBodyPos.x, rotatedStepCenter[1] + globalBodyPos.y,
+					rotatedStepCenter[2] + globalBodyPos.z, localBodyPos.roll, localBodyPos.pitch, localBodyPos.yaw);
+		}
+		
+		return globalStepCenter;
 	}
 	
 	public static Position getGlobalCoMPos(Position localBodyPos, Position globalBodyPos){

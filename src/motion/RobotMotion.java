@@ -23,8 +23,12 @@ public class RobotMotion {
 			new Position(Constants.BODYLENGTH/2, -Constants.BODYWIDTH/2, 0,0,0,0),
 			new Position(-Constants.BODYLENGTH/2, Constants.BODYWIDTH/2, 0,0,0,0),
 			new Position(-Constants.BODYLENGTH/2, -Constants.BODYWIDTH/2, 0,0,0,0)};
+	public Position[] globalStepCenter = {new Position(Constants.BODYLENGTH/2, Constants.BODYWIDTH/2, 0,0,0,0),
+			new Position(Constants.BODYLENGTH/2, -Constants.BODYWIDTH/2, 0,0,0,0),
+			new Position(-Constants.BODYLENGTH/2, Constants.BODYWIDTH/2, 0,0,0,0),
+			new Position(-Constants.BODYLENGTH/2, -Constants.BODYWIDTH/2, 0,0,0,0)};
 
-	public Position[] lastGlobalCornerPos = {new Position(Constants.BODYLENGTH/2, Constants.BODYWIDTH/2, 0,0,0,0),
+	public Position[] lastGlobalStepCenter = {new Position(Constants.BODYLENGTH/2, Constants.BODYWIDTH/2, 0,0,0,0),
 			new Position(Constants.BODYLENGTH/2, -Constants.BODYWIDTH/2, 0,0,0,0),
 			new Position(-Constants.BODYLENGTH/2, Constants.BODYWIDTH/2, 0,0,0,0),
 			new Position(-Constants.BODYLENGTH/2, -Constants.BODYWIDTH/2, 0,0,0,0)};
@@ -104,6 +108,7 @@ public class RobotMotion {
 		case stopped:
 			break;
 		case standing:
+			handleStanding();
 			break;
 		}
 	}
@@ -114,23 +119,24 @@ public class RobotMotion {
 	
 	public void handleWalkingLegs(){
 		//updateGlobalRobotPos();
+		globalStepCenter = Body.getGlobalStepCenter(localRobotPos, globalRobotPos);
 		globalCornerPos = Body.getGlobalCornerPos(localRobotPos, globalRobotPos);
 		frontLeftLeg.setFootPos(Body.getRelativeFootPos(globalCornerPos[0], globalFeetPos[0]));
 		frontRightLeg.setFootPos(Body.getRelativeFootPos(globalCornerPos[1], globalFeetPos[1]));
 		hindLeftLeg.setFootPos(Body.getRelativeFootPos(globalCornerPos[2], globalFeetPos[2]));
 		hindRightLeg.setFootPos(Body.getRelativeFootPos(globalCornerPos[3], globalFeetPos[3]));
-		/*if(globalRobotPos.x < 100) {
+		if(globalRobotPos.x < 100) {
 			globalRobotPos.x += robotSpeed/updateRate;
 			currentRobotSpeedX = robotSpeed;
 			//localRobotPos.yaw += turningSpeed/updateRate;
 			System.out.println(globalRobotPos.x);
 		}
-		else if(globalRobotPos.y < 15){
+		/*else if(globalRobotPos.y < 15){
 			globalRobotPos.y += robotSpeed/updateRate;
 			currentRobotSpeedY = robotSpeed;
 			System.out.println(globalRobotPos.y);
 		}*/
-		localRobotPos.yaw += turningSpeed/updateRate;
+		//localRobotPos.yaw += turningSpeed/updateRate;
 		stepLengthX = currentRobotSpeedX*stepTime*2.0;
 		stepLengthY = currentRobotSpeedY*stepTime*2.0;
 		switch(steppingLeg){
@@ -159,8 +165,17 @@ public class RobotMotion {
 				}
 			break;
 		}
-		if(steppingLeg != lastSteppingLeg) lastGlobalCornerPos = globalCornerPos.clone();
+		if(steppingLeg != lastSteppingLeg) lastGlobalStepCenter = globalStepCenter.clone();
 		lastSteppingLeg = steppingLeg;
+	}
+	
+	public void handleStanding(){
+		globalCornerPos = Body.getGlobalCornerPos(localRobotPos, globalRobotPos);
+		frontLeftLeg.setFootPos(Body.getRelativeFootPos(globalCornerPos[0], globalFeetPos[0]));
+		frontRightLeg.setFootPos(Body.getRelativeFootPos(globalCornerPos[1], globalFeetPos[1]));
+		hindLeftLeg.setFootPos(Body.getRelativeFootPos(globalCornerPos[2], globalFeetPos[2]));
+		hindRightLeg.setFootPos(Body.getRelativeFootPos(globalCornerPos[3], globalFeetPos[3]));
+		
 	}
 	
 	public void handleTrottingLegs(){
@@ -189,7 +204,7 @@ public class RobotMotion {
 				}
 			break;
 		}
-		if(steppingLeg != lastSteppingLeg) lastGlobalCornerPos = globalCornerPos.clone();
+		if(steppingLeg != lastSteppingLeg) lastGlobalStepCenter = globalStepCenter.clone();
 		lastSteppingLeg = steppingLeg;
 	}
 	
@@ -260,13 +275,13 @@ public class RobotMotion {
 			if(!startedStepping) stepTimer.reset();//timer doesn't start until updateStep() is first called
 			startedStepping = true;
 			if(stepTimer.get() < .25){
-				globalFeetPos[leg].x = lastGlobalCornerPos[leg].x + stepLengthX;
-				globalFeetPos[leg].y = lastGlobalCornerPos[leg].y + stepLengthY;
+				globalFeetPos[leg].x = lastGlobalStepCenter[leg].x + stepLengthX;
+				globalFeetPos[leg].y = lastGlobalStepCenter[leg].y + stepLengthY;
 				globalFeetPos[leg].z = stepHeight;
 			}
 			else if(stepTimer.get() < .5){
-				globalFeetPos[leg].x = lastGlobalCornerPos[leg].x + stepLengthX;
-				globalFeetPos[leg].y = lastGlobalCornerPos[leg].y + stepLengthY;
+				globalFeetPos[leg].x = lastGlobalStepCenter[leg].x + stepLengthX;
+				globalFeetPos[leg].y = lastGlobalStepCenter[leg].y + stepLengthY;
 				globalFeetPos[leg].z = 0;
 				//localRobotPos.y = -.5;
 			}
