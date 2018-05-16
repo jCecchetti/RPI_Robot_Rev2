@@ -119,9 +119,9 @@ public class RobotMotion {
 		frontRightLeg.setFootPos(Body.getRelativeFootPos(globalCornerPos[1], globalFeetPos[1]));
 		hindLeftLeg.setFootPos(Body.getRelativeFootPos(globalCornerPos[2], globalFeetPos[2]));
 		hindRightLeg.setFootPos(Body.getRelativeFootPos(globalCornerPos[3], globalFeetPos[3]));
-		if(globalRobotPos.y < 100) {
-			globalRobotPos.y += robotSpeed/updateRate;
-			currentRobotSpeedY = robotSpeed;
+		if(globalRobotPos.x < 100) {
+			globalRobotPos.x += robotSpeed/updateRate;
+			currentRobotSpeedX = robotSpeed;
 			//localRobotPos.yaw += turningSpeed/updateRate;
 			System.out.println(globalRobotPos.x);
 		}
