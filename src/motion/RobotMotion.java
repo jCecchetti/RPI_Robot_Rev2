@@ -119,18 +119,18 @@ public class RobotMotion {
 		frontRightLeg.setFootPos(Body.getRelativeFootPos(globalCornerPos[1], globalFeetPos[1]));
 		hindLeftLeg.setFootPos(Body.getRelativeFootPos(globalCornerPos[2], globalFeetPos[2]));
 		hindRightLeg.setFootPos(Body.getRelativeFootPos(globalCornerPos[3], globalFeetPos[3]));
-		if(globalRobotPos.x < 100) {
+		/*if(globalRobotPos.x < 100) {
 			globalRobotPos.x += robotSpeed/updateRate;
 			currentRobotSpeedX = robotSpeed;
 			//localRobotPos.yaw += turningSpeed/updateRate;
 			System.out.println(globalRobotPos.x);
 		}
-		/*else if(globalRobotPos.y < 15){
+		else if(globalRobotPos.y < 15){
 			globalRobotPos.y += robotSpeed/updateRate;
 			currentRobotSpeedY = robotSpeed;
 			System.out.println(globalRobotPos.y);
 		}*/
-		//else localRobotPos.yaw += turningSpeed/updateRate;
+		localRobotPos.yaw += turningSpeed/updateRate;
 		stepLengthX = currentRobotSpeedX*stepTime*2.0;
 		stepLengthY = currentRobotSpeedY*stepTime*2.0;
 		switch(steppingLeg){
