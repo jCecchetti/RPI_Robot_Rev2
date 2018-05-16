@@ -36,7 +36,7 @@ public class RobotMotion {
 	private double updateRate = Constants.UPDATESPERSECOND;
 	private Leg frontLeftLeg, frontRightLeg, hindLeftLeg, hindRightLeg;
 	private Leg[] legs;
-	private double stepTime = .75;
+	private double stepTime = 1.0;
 	private double stepLengthX = 0;
 	private double stepLengthY = 0;
 	private double stepHeight = 1;
@@ -113,13 +113,24 @@ public class RobotMotion {
 	private Step step = new Step(0);
 	
 	public void handleWalkingLegs(){
-		updateGlobalRobotPos();
+		//updateGlobalRobotPos();
 		globalCornerPos = Body.getGlobalCornerPos(localRobotPos, globalRobotPos);
 		frontLeftLeg.setFootPos(Body.getRelativeFootPos(globalCornerPos[0], globalFeetPos[0]));
 		frontRightLeg.setFootPos(Body.getRelativeFootPos(globalCornerPos[1], globalFeetPos[1]));
 		hindLeftLeg.setFootPos(Body.getRelativeFootPos(globalCornerPos[2], globalFeetPos[2]));
 		hindRightLeg.setFootPos(Body.getRelativeFootPos(globalCornerPos[3], globalFeetPos[3]));
-		//globalRobotPos.x += robotSpeed/updateRate;
+		if(globalRobotPos.x < 15) {
+			globalRobotPos.x += robotSpeed/updateRate;
+			currentRobotSpeedX = robotSpeed;
+			localRobotPos.yaw += turningSpeed/updateRate;
+			System.out.println(globalRobotPos.x);
+		}
+		else if(globalRobotPos.y < 15){
+			globalRobotPos.y += robotSpeed/updateRate;
+			currentRobotSpeedY = robotSpeed;
+			System.out.println(globalRobotPos.y);
+		}
+		else localRobotPos.yaw += turningSpeed/updateRate;
 		stepLengthX = currentRobotSpeedX*stepTime*2.0;
 		stepLengthY = currentRobotSpeedY*stepTime*2.0;
 		switch(steppingLeg){
@@ -159,17 +170,7 @@ public class RobotMotion {
 		frontRightLeg.setFootPos(Body.getRelativeFootPos(globalCornerPos[1], globalFeetPos[1]));
 		hindLeftLeg.setFootPos(Body.getRelativeFootPos(globalCornerPos[2], globalFeetPos[2]));
 		hindRightLeg.setFootPos(Body.getRelativeFootPos(globalCornerPos[3], globalFeetPos[3]));
-		if(globalRobotPos.x < 15) {
-			globalRobotPos.x += robotSpeed/updateRate;
-			currentRobotSpeedX = robotSpeed;
-			System.out.println(globalRobotPos.x);
-		}
-		else if(globalRobotPos.y < 15){
-			globalRobotPos.y += robotSpeed/updateRate;
-			currentRobotSpeedY = robotSpeed;
-			System.out.println(globalRobotPos.y);
-		}
-		else localRobotPos.yaw += turningSpeed/updateRate;
+		
 		stepLengthX = currentRobotSpeedX*stepTime*2.0;
 		stepLengthY = currentRobotSpeedY*stepTime*2.0;
 		switch(steppingLeg){
