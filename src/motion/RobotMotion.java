@@ -274,16 +274,16 @@ public class RobotMotion {
 		public boolean updateStep(){
 			if(!startedStepping) stepTimer.reset();//timer doesn't start until updateStep() is first called
 			startedStepping = true;
-			if(stepTimer.get() < .25){
+			if(stepTimer.get() < .15){
 				globalFeetPos[leg].z = stepHeight;
-				System.out.println("lifting");
+				//System.out.println("lifting");
 			}
-			if(stepTimer.get() < .5){
+			else if(stepTimer.get() < .3){
 				globalFeetPos[leg].x = lastGlobalStepCenter[leg].x + stepLengthX;
 				globalFeetPos[leg].y = lastGlobalStepCenter[leg].y + stepLengthY;
 				globalFeetPos[leg].z = stepHeight;
 			}
-			else if(stepTimer.get() < .75){
+			else if(stepTimer.get() < .5){
 				globalFeetPos[leg].x = lastGlobalStepCenter[leg].x + stepLengthX;
 				globalFeetPos[leg].y = lastGlobalStepCenter[leg].y + stepLengthY;
 				globalFeetPos[leg].z = 0;
