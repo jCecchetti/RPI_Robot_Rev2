@@ -260,8 +260,8 @@ public class RobotMotion {
 			if(!startedStepping) stepTimer.reset();//timer doesn't start until updateStep() is first called
 			startedStepping = true;
 			if(stepTimer.get() < .25){
-				globalFeetPos[leg].x = lastGlobalCornerPos[leg].x;
-				globalFeetPos[leg].y = lastGlobalCornerPos[leg].y;
+				globalFeetPos[leg].x = lastGlobalCornerPos[leg].x + stepLengthX;
+				globalFeetPos[leg].y = lastGlobalCornerPos[leg].y + stepLengthY;
 				globalFeetPos[leg].z = stepHeight;
 			}
 			else if(stepTimer.get() < .5){
