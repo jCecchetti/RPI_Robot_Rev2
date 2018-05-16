@@ -57,6 +57,7 @@ public class Leg {
 			servo2.setPosition((float) kneeAngle);
 			servo3.setPosition((float) ankleAngle);
 		}
+		servo1.
 		
 		return true;
 	}
