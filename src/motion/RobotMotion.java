@@ -43,7 +43,7 @@ public class RobotMotion {
 	private double stepTime = 1.0;
 	private double stepLengthX = 0;
 	private double stepLengthY = 0;
-	private double stepHeight = 1;
+	private double stepHeight = 1.5;
 	private Timer timer = new Timer();
 	public boolean end = false;
 
@@ -278,7 +278,7 @@ public class RobotMotion {
 				globalFeetPos[leg].z = stepHeight;
 				//System.out.println("lifting");
 			}
-			else if(stepTimer.get() < .3){
+			else if(stepTimer.get() < .4){
 				globalFeetPos[leg].x = lastGlobalStepCenter[leg].x + stepLengthX;
 				globalFeetPos[leg].y = lastGlobalStepCenter[leg].y + stepLengthY;
 				globalFeetPos[leg].z = stepHeight;
