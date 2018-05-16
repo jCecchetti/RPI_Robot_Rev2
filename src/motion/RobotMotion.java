@@ -9,33 +9,36 @@ import kinematics.Leg;
 import util.Constants;
 import util.Position;
 import util.Timer;
+import util.Trig;
 
 public class RobotMotion {
 	
-	private Position globalRobotPos = new Position(0,0,6.5,0,0,0);
-	private Position localRobotPos = new Position(0,0,0,0,0,0);
-	private Position[] globalFeetPos = {new Position(Constants.BODYLENGTH/2, Constants.BODYWIDTH/2 + 1, 0,0,0,0),
+	public Position globalRobotPos = new Position(0,0,6.5,0,0,0);
+	public Position localRobotPos = new Position(0,0,0,0,0,0);
+	public Position[] globalFeetPos = {new Position(Constants.BODYLENGTH/2, Constants.BODYWIDTH/2 + 1, 0,0,0,0),
 			new Position(Constants.BODYLENGTH/2, -Constants.BODYWIDTH/2 - 1, 0,0,0,0),
 			new Position(-Constants.BODYLENGTH/2, Constants.BODYWIDTH/2 + 1, 0,0,0,0),
 			new Position(-Constants.BODYLENGTH/2, -Constants.BODYWIDTH/2 - 1, 0,0,0,0)};
-	private Position[] globalCornerPos = {new Position(Constants.BODYLENGTH/2, Constants.BODYWIDTH/2, 0,0,0,0),
+	public Position[] globalCornerPos = {new Position(Constants.BODYLENGTH/2, Constants.BODYWIDTH/2, 0,0,0,0),
 			new Position(Constants.BODYLENGTH/2, -Constants.BODYWIDTH/2, 0,0,0,0),
 			new Position(-Constants.BODYLENGTH/2, Constants.BODYWIDTH/2, 0,0,0,0),
 			new Position(-Constants.BODYLENGTH/2, -Constants.BODYWIDTH/2, 0,0,0,0)};
 
-	private Position[] lastGlobalCornerPos = {new Position(Constants.BODYLENGTH/2, Constants.BODYWIDTH/2, 0,0,0,0),
+	public Position[] lastGlobalCornerPos = {new Position(Constants.BODYLENGTH/2, Constants.BODYWIDTH/2, 0,0,0,0),
 			new Position(Constants.BODYLENGTH/2, -Constants.BODYWIDTH/2, 0,0,0,0),
 			new Position(-Constants.BODYLENGTH/2, Constants.BODYWIDTH/2, 0,0,0,0),
 			new Position(-Constants.BODYLENGTH/2, -Constants.BODYWIDTH/2, 0,0,0,0)};
 
 	private double robotSpeed = 1;// in/s
-	private double currentRobotSpeed = 0;
-	private double turningSpeed = 45;// degrees/s
+	private double currentRobotSpeedX = 0;
+	private double currentRobotSpeedY = 0;
+	private double turningSpeed = 10.0;// degrees/s
 	private double updateRate = Constants.UPDATESPERSECOND;
 	private Leg frontLeftLeg, frontRightLeg, hindLeftLeg, hindRightLeg;
 	private Leg[] legs;
-	private double stepTime = 1.0;
-	private double stepLength = 0;
+	private double stepTime = .75;
+	private double stepLengthX = 0;
+	private double stepLengthY = 0;
 	private double stepHeight = 1;
 	private Timer timer = new Timer();
 	public boolean end = false;
@@ -52,106 +55,126 @@ public class RobotMotion {
 		KeyManager.tick();
 		if(KeyManager.w) {
 			globalRobotPos.x += robotSpeed/updateRate;
-			currentRobotSpeed = robotSpeed; 
+			currentRobotSpeedX = robotSpeed; 
 		}
 		else if(KeyManager.s) {
 			globalRobotPos.x -= robotSpeed/updateRate;
-			currentRobotSpeed = -robotSpeed; 
+			currentRobotSpeedX = -robotSpeed; 
 		}
-		else currentRobotSpeed = 0; 
-		if(KeyManager.d) globalRobotPos.y += robotSpeed/updateRate;
-		if(KeyManager.a) globalRobotPos.y -= robotSpeed/updateRate;
+		else currentRobotSpeedX = 0; 
+		if(KeyManager.d){ 
+			globalRobotPos.y += robotSpeed/updateRate;
+			currentRobotSpeedY = robotSpeed;
+		}
+		else if(KeyManager.a){
+			globalRobotPos.y -= robotSpeed/updateRate;
+			currentRobotSpeedY = -robotSpeed;
+		}
+		else currentRobotSpeedY = 0;
 		if(KeyManager.j) localRobotPos.yaw += turningSpeed/updateRate;
 		if(KeyManager.l) localRobotPos.yaw -= turningSpeed/updateRate;
-		if(KeyManager.i) end = true;
+		if(KeyManager.space) end = true;
 	}
 	
-	private enum leg{frontLeft, frontRight, rearLeft, rearRight}
+	private enum leg{frontLeft (0), frontRight (1), rearLeft(2), rearRight (3);
+		
+		private int legNum;
+		leg(int legNum) {
+			this.legNum = legNum;
+		}
+		
+		int getLegNum() {
+			return legNum;
+		}
+	}
+	public enum State{walking, trotting, laying, stopped, standing}
+	
+	public State currentState = State.laying;
+	
+	public void setWantedState(State wantedState){
+		
+		switch(wantedState){
+		case walking:
+			handleWalkingLegs();
+			break;
+		case trotting:
+			break;
+		case laying:
+			break;
+		case stopped:
+			break;
+		case standing:
+			break;
+		}
+	}
 	
 	private leg steppingLeg = leg.frontLeft;
 	private leg lastSteppingLeg = leg.frontLeft;
+	private Step step = new Step(0);
 	
-	public void handleLegs(){
+	public void handleWalkingLegs(){
 		updateGlobalRobotPos();
 		globalCornerPos = Body.getGlobalCornerPos(localRobotPos, globalRobotPos);
-//		legs[0].setFootPos(Body.getRelativeFootPos(globalCornerPos[0], globalFeetPos[0]));
-//		legs[1].setFootPos(Body.getRelativeFootPos(globalCornerPos[1], globalFeetPos[1]));
-//		legs[2].setFootPos(Body.getRelativeFootPos(globalCornerPos[2], globalFeetPos[2]));
-//		legs[3].setFootPos(Body.getRelativeFootPos(globalCornerPos[3], globalFeetPos[3]));
 		frontLeftLeg.setFootPos(Body.getRelativeFootPos(globalCornerPos[0], globalFeetPos[0]));
 		frontRightLeg.setFootPos(Body.getRelativeFootPos(globalCornerPos[1], globalFeetPos[1]));
 		hindLeftLeg.setFootPos(Body.getRelativeFootPos(globalCornerPos[2], globalFeetPos[2]));
 		hindRightLeg.setFootPos(Body.getRelativeFootPos(globalCornerPos[3], globalFeetPos[3]));
 		//globalRobotPos.x += robotSpeed/updateRate;
-		stepLength = currentRobotSpeed*stepTime*2.0;
+		stepLengthX = currentRobotSpeedX*stepTime*2.0;
+		stepLengthY = currentRobotSpeedY*stepTime*2.0;
 		switch(steppingLeg){
 			case frontLeft:
-				localRobotPos.y = -.5;
-				localRobotPos.x = -.5;
-				if(timer.get() < .25){
-					globalFeetPos[0].x = lastGlobalCornerPos[0].x;
-					globalFeetPos[0].z = stepHeight;
-				}
-				else if(timer.get() < 1){
-					globalFeetPos[0].x = lastGlobalCornerPos[0].x + stepLength;
-					globalFeetPos[0].z = 0;
-				}
-				else{
+				if(step.shiftCoM() && step.updateStep()){
 					steppingLeg = leg.rearLeft;
-					timer.reset();
+					step = new Step(2);
 				}
-				//if(HandleCoM.CoMStable(diagonalLeg1, diagonalLeg2, farLeg, CoMPos) 
 			break;
 			case rearLeft:
-				localRobotPos.y = -.5;
-				localRobotPos.x = .5;
-				if(timer.get() < .25){
-					globalFeetPos[2].x = lastGlobalCornerPos[2].x;
-					globalFeetPos[2].z = stepHeight;
-					//localRobotPos.y = -.5;
-				}
-				else if(timer.get() < 1){
-					globalFeetPos[2].x = lastGlobalCornerPos[2].x + stepLength;
-					globalFeetPos[2].z = 0;
-					//localRobotPos.y = .5;
-				}
-				else{
+				if(step.shiftCoM() && step.updateStep()){
 					steppingLeg = leg.rearRight;
-					timer.reset();
+					step = new Step(3);
 				}
 			break;
 			case frontRight:
-				localRobotPos.y = .5;
-				localRobotPos.x = -.5;
-				if(timer.get() < .25){
-					globalFeetPos[1].x = lastGlobalCornerPos[1].x;
-					globalFeetPos[1].z = stepHeight;
-				}
-				else if(timer.get() < 1){
-					globalFeetPos[1].x = lastGlobalCornerPos[1].x + stepLength;
-					globalFeetPos[1].z = 0;
-				}
-				else{
+				if(step.shiftCoM() && step.updateStep()){
 					steppingLeg = leg.frontLeft;
-					timer.reset();
+					step = new Step(0);
 				}
 			break;
 			case rearRight:
-				localRobotPos.y = .5;
-				localRobotPos.x = .5;
-				if(timer.get() < .25){
-					globalFeetPos[3].x = lastGlobalCornerPos[3].x;
-					globalFeetPos[3].z = stepHeight;
-					//localRobotPos.y = .5;
-				}
-				else if(timer.get() < 1){
-					globalFeetPos[3].x = lastGlobalCornerPos[3].x + stepLength;
-					globalFeetPos[3].z = 0;
-					//localRobotPos.y = -.5;
-				}
-				else{
+				if(step.shiftCoM() && step.updateStep()){
 					steppingLeg = leg.frontRight;
-					timer.reset();
+					step = new Step(1);
+				}
+			break;
+		}
+		if(steppingLeg != lastSteppingLeg) lastGlobalCornerPos = globalCornerPos.clone();
+		lastSteppingLeg = steppingLeg;
+	}
+	
+	public void handleTrottingLegs(){
+		updateGlobalRobotPos();
+		globalCornerPos = Body.getGlobalCornerPos(localRobotPos, globalRobotPos);
+		frontLeftLeg.setFootPos(Body.getRelativeFootPos(globalCornerPos[0], globalFeetPos[0]));
+		frontRightLeg.setFootPos(Body.getRelativeFootPos(globalCornerPos[1], globalFeetPos[1]));
+		hindLeftLeg.setFootPos(Body.getRelativeFootPos(globalCornerPos[2], globalFeetPos[2]));
+		hindRightLeg.setFootPos(Body.getRelativeFootPos(globalCornerPos[3], globalFeetPos[3]));
+		//globalRobotPos.x += robotSpeed/updateRate;
+		stepLengthX = currentRobotSpeedX*stepTime*2.0;
+		stepLengthY = currentRobotSpeedY*stepTime*2.0;
+		switch(steppingLeg){
+			case rearRight:
+			case frontLeft:
+				if(step.balanceCoM() && step.updateStep()){
+					steppingLeg = leg.frontRight;
+					step = new Step(2);
+				}
+			break;
+			case rearLeft:
+			case frontRight:
+				if(step.balanceCoM() && step.updateStep()){
+					steppingLeg = leg.frontLeft;
+					step = new Step(0);
 				}
 			break;
 		}
@@ -169,11 +192,11 @@ public class RobotMotion {
 		int[] yposTri = {0,0,0,0};
 		
 		for(int i = 0; i < 4; i++){
-			if(i != getSteppingLegNum()){
+			if(i != steppingLeg.getLegNum()){
 				xposTri[i] = (int) (globalFeetPos[i].x*Constants.PixelsPerIn + Constants.x0);
 				yposTri[i] = (int) (globalFeetPos[i].y*Constants.PixelsPerIn + Constants.y0);
 			}
-			else if(getSteppingLegNum() != 0){
+			else if(steppingLeg.getLegNum() != 0){
 				xposTri[i] = (int) (globalFeetPos[i-1].x*Constants.PixelsPerIn + Constants.x0);
 				yposTri[i] = (int) (globalFeetPos[i-1].y*Constants.PixelsPerIn + Constants.y0);
 			}
@@ -182,31 +205,143 @@ public class RobotMotion {
 				yposTri[i] = (int) (globalFeetPos[i+1].y*Constants.PixelsPerIn + Constants.y0);
 			}
 		}
-		
+
 		//Draw the rotated rectangle
 		g.setColor(Color.gray);
 		g.fillPolygon(xpos, ypos, 4);
 		g.setColor(Color.BLACK);
 		g.drawPolygon(xpos, ypos, 4);
-		g.fillOval((int) (globalRobotPos.x*Constants.PixelsPerIn + Constants.x0), (int) (globalRobotPos.y*Constants.PixelsPerIn + Constants.y0), 10, 10);//draw global pos
-		g.fillOval((int) (globalFeetPos[0].x*Constants.PixelsPerIn + Constants.x0), (int) (globalFeetPos[0].y*Constants.PixelsPerIn + Constants.y0), 10, 10);
-		g.fillOval((int) (globalFeetPos[1].x*Constants.PixelsPerIn + Constants.x0), (int) (globalFeetPos[1].y*Constants.PixelsPerIn + Constants.y0), 10, 10);
-		g.fillOval((int) (globalFeetPos[2].x*Constants.PixelsPerIn + Constants.x0), (int) (globalFeetPos[2].y*Constants.PixelsPerIn + Constants.y0), 10, 10);
-		g.fillOval((int) (globalFeetPos[3].x*Constants.PixelsPerIn + Constants.x0), (int) (globalFeetPos[3].y*Constants.PixelsPerIn + Constants.y0), 10, 10);
+		g.fillOval((int) (globalRobotPos.x*Constants.PixelsPerIn + Constants.x0)-5, (int) (globalRobotPos.y*Constants.PixelsPerIn + Constants.y0)-5, 10, 10);//draw global pos
+		//Draw Feet
+		g.fillOval((int) (globalFeetPos[0].x*Constants.PixelsPerIn + Constants.x0)-5, (int) (globalFeetPos[0].y*Constants.PixelsPerIn + Constants.y0)-5, 10, 10);
+		g.fillOval((int) (globalFeetPos[1].x*Constants.PixelsPerIn + Constants.x0)-5, (int) (globalFeetPos[1].y*Constants.PixelsPerIn + Constants.y0)-5, 10, 10);
+		g.fillOval((int) (globalFeetPos[2].x*Constants.PixelsPerIn + Constants.x0)-5, (int) (globalFeetPos[2].y*Constants.PixelsPerIn + Constants.y0)-5, 10, 10);
+		g.fillOval((int) (globalFeetPos[3].x*Constants.PixelsPerIn + Constants.x0)-5, (int) (globalFeetPos[3].y*Constants.PixelsPerIn + Constants.y0)-5, 10, 10);
+		
+		/*g.fillOval((int) (Body.getRelativeFootPos(globalCornerPos[0], globalFeetPos[0]).x*Constants.PixelsPerIn + Constants.x0)-5,
+				(int) (Body.getRelativeFootPos(globalCornerPos[0], globalFeetPos[0]).y*Constants.PixelsPerIn + Constants.y0)-5, 10, 10);*/
+		//draw stable base triangle
 		g.drawPolygon(xposTri, yposTri, 4);
 		if(steppingLeg == leg.frontLeft && HandleCoM.CoMStable(globalFeetPos[1], globalFeetPos[2], globalFeetPos[3], Body.getGlobalCoMPos(localRobotPos, globalRobotPos))) g.setColor(Color.WHITE);
 		else if(steppingLeg == leg.frontRight && HandleCoM.CoMStable(globalFeetPos[0], globalFeetPos[2], globalFeetPos[3], Body.getGlobalCoMPos(localRobotPos, globalRobotPos))) g.setColor(Color.WHITE);
 		else if(steppingLeg == leg.rearLeft && HandleCoM.CoMStable(globalFeetPos[0], globalFeetPos[1], globalFeetPos[3], Body.getGlobalCoMPos(localRobotPos, globalRobotPos))) g.setColor(Color.WHITE);
 		else if(steppingLeg == leg.rearRight && HandleCoM.CoMStable(globalFeetPos[0], globalFeetPos[1], globalFeetPos[2], Body.getGlobalCoMPos(localRobotPos, globalRobotPos))) g.setColor(Color.WHITE);
-		g.fillOval((int) (Body.getGlobalCoMPos(localRobotPos, globalRobotPos).x*Constants.PixelsPerIn + Constants.x0),
-				(int) (Body.getGlobalCoMPos(localRobotPos, globalRobotPos).y*Constants.PixelsPerIn + Constants.y0), 10, 10);
+		g.fillOval((int) (Body.getGlobalCoMPos(localRobotPos, globalRobotPos).x*Constants.PixelsPerIn + Constants.x0)-5,
+				(int) (Body.getGlobalCoMPos(localRobotPos, globalRobotPos).y*Constants.PixelsPerIn + Constants.y0)-5, 10, 10);
+		g.fillOval((int) (Body.getGlobalAdjustedCoMPos(localRobotPos, globalRobotPos, steppingLeg.getLegNum()).x*Constants.PixelsPerIn + Constants.x0)-5,
+				(int) (Body.getGlobalAdjustedCoMPos(localRobotPos, globalRobotPos, steppingLeg.getLegNum()).y*Constants.PixelsPerIn + Constants.y0)-5, 10, 10);
 	}
 	
-	public int getSteppingLegNum(){
-		if(steppingLeg == leg.frontLeft) return 0;
-		else if(steppingLeg == leg.frontRight) return 1;
-		else if(steppingLeg == leg.rearLeft) return 2;
-		else return 3;
+	/*Class for handling steps*/
+	public class Step{
+		
+		private Timer stepTimer = new Timer();
+		boolean startedStepping = false;
+		boolean finishedStepping = false;
+		int leg;
+		private double shiftSpeed = 2.0;
+		
+		public Step(int leg){
+			this.leg = leg;
+		}
+		
+		public boolean updateStep(){
+			if(!startedStepping) stepTimer.reset();//timer doesn't start until updateStep() is first called
+			startedStepping = true;
+			if(stepTimer.get() < .25){
+				globalFeetPos[leg].x = lastGlobalCornerPos[leg].x;
+				globalFeetPos[leg].y = lastGlobalCornerPos[leg].y;
+				globalFeetPos[leg].z = stepHeight;
+			}
+			else if(stepTimer.get() < .5){
+				globalFeetPos[leg].x = lastGlobalCornerPos[leg].x + stepLengthX;
+				globalFeetPos[leg].y = lastGlobalCornerPos[leg].y + stepLengthY;
+				globalFeetPos[leg].z = 0;
+				//localRobotPos.y = -.5;
+			}
+			else{
+				finishedStepping = true;
+			}
+			return finishedStepping;
+		}
+		
+		public boolean shiftCoM(){
+			double speed = shiftSpeed/updateRate;
+			Position adjustedCoMPos = Body.getGlobalAdjustedCoMPos(localRobotPos, globalRobotPos, steppingLeg.getLegNum());
+			switch(steppingLeg){
+			case frontLeft:
+				if(!HandleCoM.CoMStable(globalFeetPos[1], globalFeetPos[2], globalFeetPos[3], adjustedCoMPos)){
+					double dist = Trig.dist(adjustedCoMPos, globalFeetPos[3]);
+					localRobotPos.y += speed*(globalFeetPos[3].y - adjustedCoMPos.y)/dist;
+					localRobotPos.x += speed*(globalFeetPos[3].x - adjustedCoMPos.x)/dist;
+				}
+				else return true;
+				break;
+			case frontRight:
+				if(!HandleCoM.CoMStable(globalFeetPos[0], globalFeetPos[2], globalFeetPos[3], adjustedCoMPos)){
+					double dist = Trig.dist(adjustedCoMPos, globalFeetPos[2]);
+					localRobotPos.y += speed*(globalFeetPos[2].y - adjustedCoMPos.y)/dist;
+					localRobotPos.x += speed*(globalFeetPos[2].x - adjustedCoMPos.x)/dist;
+				}
+				else return true;
+				break;
+			case rearLeft:
+				if(!HandleCoM.CoMStable(globalFeetPos[0], globalFeetPos[1], globalFeetPos[3], adjustedCoMPos)){
+					double dist = Trig.dist(adjustedCoMPos, globalFeetPos[1]);
+					localRobotPos.y += speed*(globalFeetPos[1].y - adjustedCoMPos.y)/dist;
+					localRobotPos.x += speed*(globalFeetPos[1].x - adjustedCoMPos.x)/dist;
+				}
+				else return true;
+				break;
+			case rearRight:
+				if(!HandleCoM.CoMStable(globalFeetPos[0], globalFeetPos[1], globalFeetPos[2], adjustedCoMPos)){
+					double dist = Trig.dist(adjustedCoMPos, globalFeetPos[0]);
+					localRobotPos.y += speed*(globalFeetPos[0].y - adjustedCoMPos.y)/dist;
+					localRobotPos.x += speed*(globalFeetPos[0].x - adjustedCoMPos.x)/dist;
+				}
+				else return true;
+				break;
+			}
+			return false;
+		}
+		
+		public boolean balanceCoM(){
+			double speed = shiftSpeed/updateRate;
+			Position CoMPos = Body.getGlobalCoMPos(localRobotPos, globalRobotPos);
+			Position frontBalanceLimit = Body.getGlobalAdjustedCoMPos(localRobotPos, globalRobotPos, steppingLeg.getLegNum());
+			Position rearBalanceLimit = Body.getGlobalAdjustedCoMPos(localRobotPos, globalRobotPos, 3 - steppingLeg.getLegNum());
+			switch(steppingLeg){
+			case rearRight:
+			case frontLeft:
+				if(!HandleCoM.CoMStable(globalFeetPos[1], globalFeetPos[2], globalFeetPos[3], CoMPos)){
+					double dist = Trig.dist(CoMPos, globalFeetPos[3]);
+					localRobotPos.y += speed*(globalFeetPos[3].y - CoMPos.y)/dist;
+					localRobotPos.x += speed*(globalFeetPos[3].x - CoMPos.x)/dist;
+				}
+				else{
+					double dist = Trig.dist(CoMPos, globalFeetPos[3]);
+					localRobotPos.y -= speed*(globalFeetPos[3].y - CoMPos.y)/dist;
+					localRobotPos.x -= speed*(globalFeetPos[3].x - CoMPos.x)/dist;
+				}
+				if(HandleCoM.CoMStable(globalFeetPos[1], globalFeetPos[2], globalFeetPos[3], frontBalanceLimit) &&
+						!HandleCoM.CoMStable(globalFeetPos[1], globalFeetPos[2], globalFeetPos[3], rearBalanceLimit));
+				else return true;
+				break;
+			case rearLeft:
+			case frontRight:
+				if(!HandleCoM.CoMStable(globalFeetPos[0], globalFeetPos[2], globalFeetPos[3], CoMPos)){
+					double dist = Trig.dist(CoMPos, globalFeetPos[2]);
+					localRobotPos.y += speed*(globalFeetPos[2].y - CoMPos.y)/dist;
+					localRobotPos.x += speed*(globalFeetPos[2].x - CoMPos.x)/dist;
+				}
+				else return true;
+				break;
+				
+			}
+			return false;
+		}
+		
 	}
+	
 
 }

@@ -37,7 +37,10 @@ public class Trig {
 		return result;
 	}
 	
-	
+	public static double dist(Position CoMPos, Position globalFeetPos){
+		double result = Math.hypot(CoMPos.x - globalFeetPos.x, CoMPos.y - globalFeetPos.y);
+		return result;
+	}
 	
 
 }

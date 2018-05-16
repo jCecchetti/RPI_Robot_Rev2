@@ -8,6 +8,10 @@ public class Body {
 	
 	private static Position[] localCornerPos = {new Position(0,0,0,0,0,0),new Position(0,0,0,0,0,0),new Position(0,0,0,0,0,0),new Position(0,0,0,0,0,0)};
 	private static Position[] globalCornerPos = {new Position(0,0,0,0,0,0),new Position(0,0,0,0,0,0),new Position(0,0,0,0,0,0),new Position(0,0,0,0,0,0)};
+	private static double[][] localCoMBox = {{Constants.COMBOX, Constants.COMBOX, 0},
+											{Constants.COMBOX, -Constants.COMBOX, 0},
+											{-Constants.COMBOX, Constants.COMBOX, 0},
+											{-Constants.COMBOX, -Constants.COMBOX, 0}};
 	
 	public static Position[] getLocalCornerPos(Position localBodyPos){
 		double[][] unrotatedLocalCornerPos = {{Constants.BODYLENGTH/2, Constants.BODYWIDTH/2, 0},
@@ -21,14 +25,14 @@ public class Body {
 		double[][] pitchRotationMatrix = {{1, 0, 0},
 										  {0, Math.cos(localBodyPos.pitch), Math.sin(localBodyPos.pitch)},
 										  {0, -Math.sin(localBodyPos.pitch), Math.cos(localBodyPos.pitch)}};
-		double[][] yawRotationMatrix = {{Math.cos(localBodyPos.yaw), Math.sin(localBodyPos.yaw), 0},
-									    {Math.sin(localBodyPos.yaw), Math.cos(localBodyPos.yaw), 0},
+		double[][] yawRotationMatrix = {{Math.cos(Math.toRadians(localBodyPos.yaw)), -Math.sin(Math.toRadians(localBodyPos.yaw)), 0},
+									    {Math.sin(Math.toRadians(localBodyPos.yaw)), Math.cos(Math.toRadians(localBodyPos.yaw)), 0},
 									    {0, 0, 1}};
 		//double[][] RotationMatrix = Matrix.multiply(rollRotationMatrix, Matrix.Multiply)
 		for(int i = 0; i < 4; i++){
 			//unrotatedLocalCornerPos[i] = Matrix.multiply(rollRotationMatrix, unrotatedLocalCornerPos[i]);
 			//unrotatedLocalCornerPos[i] = Matrix.multiply(pitchRotationMatrix, unrotatedLocalCornerPos[i]);
-			double[] rotatedLocalCornerPos = unrotatedLocalCornerPos[i];//Matrix.multiply(yawRotationMatrix, unrotatedLocalCornerPos[i]);
+			double[] rotatedLocalCornerPos = Matrix.multiply(yawRotationMatrix, unrotatedLocalCornerPos[i]);
 			localCornerPos[i] = new Position(rotatedLocalCornerPos[0] + localBodyPos.x, rotatedLocalCornerPos[1] + localBodyPos.y,
 					rotatedLocalCornerPos[2] + localBodyPos.z, localBodyPos.roll, localBodyPos.pitch, localBodyPos.yaw);
 			//System.out.println(rotatedLocalCornerPos[0]);
@@ -50,11 +54,27 @@ public class Body {
 		return globalCoMPos;
 	}
 	
+	public static Position getGlobalAdjustedCoMPos(Position localBodyPos, Position globalBodyPos, int corner){
+		double[][] yawRotationMatrix = {{Math.cos(Math.toRadians(localBodyPos.yaw)), -Math.sin(Math.toRadians(localBodyPos.yaw)), 0},
+			    {Math.sin(Math.toRadians(localBodyPos.yaw)), Math.cos(Math.toRadians(localBodyPos.yaw)), 0},
+			    {0, 0, 1}};
+		Position globalCoMPos = getGlobalCoMPos(localBodyPos, globalBodyPos);
+		
+		double[] adjustedCoMPos = Matrix.multiply(yawRotationMatrix, localCoMBox[corner]);//get position of adjusted CoM opposite of the stepping leg
+		return new Position(adjustedCoMPos[0] + globalCoMPos.x, adjustedCoMPos[1] + globalCoMPos.y, 0, 0, 0, 0);
+	}
+	
 	public static Position getRelativeFootPos(Position globalCornerPos, Position globalFootPos){
-		double x = globalFootPos.x - globalCornerPos.x;
-		double y = globalFootPos.y - globalCornerPos.y;
-		double z = globalFootPos.z - globalCornerPos.z;
-		Position relativeFootPos = new Position(x,y,z,0,0,0);
+		
+		double[] cornerPos = {globalFootPos.x - globalCornerPos.x, globalFootPos.y - globalCornerPos.y, globalFootPos.z - globalCornerPos.z};
+		
+		double[][] yawRotationMatrix = {{Math.cos(Math.toRadians(globalCornerPos.yaw)), -Math.sin(Math.toRadians(globalCornerPos.yaw)), 0},
+			    {Math.sin(Math.toRadians(globalCornerPos.yaw)), Math.cos(Math.toRadians(globalCornerPos.yaw)), 0},
+			    {0, 0, 1}};
+		
+		cornerPos = Matrix.multiply(yawRotationMatrix, cornerPos);
+
+		Position relativeFootPos = new Position(cornerPos[0], cornerPos[1], cornerPos[2],0,0,0);
 		
 		return relativeFootPos;
 	}
