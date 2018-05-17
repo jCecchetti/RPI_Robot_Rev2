@@ -60,6 +60,7 @@ public class RobotMotion {
 		if(KeyManager.w) {
 			globalRobotPos.x += robotSpeed/updateRate;
 			currentRobotSpeedX = robotSpeed; 
+			System.out.println("forward");
 		}
 		else if(KeyManager.s) {
 			globalRobotPos.x -= robotSpeed/updateRate;
@@ -125,7 +126,7 @@ public class RobotMotion {
 		frontRightLeg.setFootPos(Body.getRelativeFootPos(globalCornerPos[1], globalFeetPos[1]));
 		hindLeftLeg.setFootPos(Body.getRelativeFootPos(globalCornerPos[2], globalFeetPos[2]));
 		hindRightLeg.setFootPos(Body.getRelativeFootPos(globalCornerPos[3], globalFeetPos[3]));
-		if(globalRobotPos.x < 10) {
+		/*if(globalRobotPos.x < 10) {
 			globalRobotPos.x += robotSpeed/updateRate;
 			currentRobotSpeedX = robotSpeed;
 			//localRobotPos.yaw += turningSpeed/updateRate;
@@ -135,7 +136,7 @@ public class RobotMotion {
 			globalRobotPos.y += robotSpeed/updateRate;
 			currentRobotSpeedY = robotSpeed;
 			//System.out.println(globalRobotPos.y);
-		}
+		}*/
 		//localRobotPos.yaw += turningSpeed/updateRate;
 		stepLengthX = currentRobotSpeedX*stepTime*2.0;
 		stepLengthY = currentRobotSpeedY*stepTime*2.0;
