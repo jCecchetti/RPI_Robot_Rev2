@@ -2,8 +2,8 @@ package util;
 
 public class Constants {
 	
-	public static final double BODYLENGTH = 13.0;
-	public static final double BODYWIDTH = 8.0;
+	public static final double BODYLENGTH = 11.0;
+	public static final double BODYWIDTH = 8.125;
 	public static final double COMBOX = .25;
 	public static final double UPDATESPERSECOND = 30.0;
 	
