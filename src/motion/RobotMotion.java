@@ -57,28 +57,26 @@ public class RobotMotion {
 	
 	public void updateGlobalRobotPos(){
 		KeyManager.tick();
-		if(KeyManager.w) {
+		if(KeyManager.numup) {
 			globalRobotPos.x += robotSpeed/updateRate;
 			currentRobotSpeedX = robotSpeed; 
-			System.out.println("forward");
 		}
-		else if(KeyManager.s) {
+		else if(KeyManager.numdown) {
 			globalRobotPos.x -= robotSpeed/updateRate;
 			currentRobotSpeedX = -robotSpeed; 
 		}
 		else currentRobotSpeedX = 0; 
-		if(KeyManager.d){ 
+		if(KeyManager.numleft){ 
 			globalRobotPos.y += robotSpeed/updateRate;
 			currentRobotSpeedY = robotSpeed;
 		}
-		else if(KeyManager.a){
+		else if(KeyManager.numright){
 			globalRobotPos.y -= robotSpeed/updateRate;
 			currentRobotSpeedY = -robotSpeed;
 		}
 		else currentRobotSpeedY = 0;
-		if(KeyManager.j) localRobotPos.yaw += turningSpeed/updateRate;
-		if(KeyManager.l) localRobotPos.yaw -= turningSpeed/updateRate;
-		if(KeyManager.space) end = true;
+		if(KeyManager.a) localRobotPos.yaw += turningSpeed/updateRate;
+		if(KeyManager.d) localRobotPos.yaw -= turningSpeed/updateRate;
 	}
 	
 	private enum leg{frontLeft (0), frontRight (1), rearLeft(2), rearRight (3);
@@ -92,7 +90,7 @@ public class RobotMotion {
 			return legNum;
 		}
 	}
-	public enum State{walking, trotting, laying, stopped, standing}
+	public enum State{walking, trotting, laying, stopped, stopping, standing}
 	
 	public State currentState = State.laying;
 	
@@ -103,10 +101,13 @@ public class RobotMotion {
 			handleWalkingLegs();
 			break;
 		case trotting:
+			handleTrottingLegs();
 			break;
 		case laying:
 			break;
+		case stopping:
 		case stopped:
+			home();
 			break;
 		case standing:
 			handleStanding();
@@ -114,9 +115,19 @@ public class RobotMotion {
 		}
 	}
 	
+	public void update(){
+		KeyManager.tick();
+		if(KeyManager.num5) currentState = State.stopped;
+		else if(KeyManager.shift) currentState = State.trotting;
+		else if(KeyManager.numup || KeyManager.numdown || KeyManager.numleft || KeyManager.numright) currentState = State.walking;
+		else if(KeyManager.space) end = true;
+		setWantedState(currentState);
+	}
+	
 	private leg steppingLeg = leg.frontLeft;
 	private leg lastSteppingLeg = leg.frontLeft;
 	private Step step = new Step(0);
+	private Step stepMir = new Step(2);
 	
 	public void handleWalkingLegs(){
 		updateGlobalRobotPos();
@@ -126,18 +137,6 @@ public class RobotMotion {
 		frontRightLeg.setFootPos(Body.getRelativeFootPos(globalCornerPos[1], globalFeetPos[1]));
 		hindLeftLeg.setFootPos(Body.getRelativeFootPos(globalCornerPos[2], globalFeetPos[2]));
 		hindRightLeg.setFootPos(Body.getRelativeFootPos(globalCornerPos[3], globalFeetPos[3]));
-		/*if(globalRobotPos.x < 10) {
-			globalRobotPos.x += robotSpeed/updateRate;
-			currentRobotSpeedX = robotSpeed;
-			//localRobotPos.yaw += turningSpeed/updateRate;
-			//System.out.println(globalRobotPos.x);
-		}
-		else if(globalRobotPos.y < 10){
-			globalRobotPos.y += robotSpeed/updateRate;
-			currentRobotSpeedY = robotSpeed;
-			//System.out.println(globalRobotPos.y);
-		}*/
-		//localRobotPos.yaw += turningSpeed/updateRate;
 		stepLengthX = currentRobotSpeedX*stepTime*2.0;
 		stepLengthY = currentRobotSpeedY*stepTime*2.0;
 		switch(steppingLeg){
@@ -192,21 +191,77 @@ public class RobotMotion {
 		switch(steppingLeg){
 			case rearRight:
 			case frontLeft:
-				if(step.balanceCoM() && step.updateStep()){
+				if(step.balanceCoM() && step.updateStep() & stepMir.updateStep()){
 					steppingLeg = leg.frontRight;
 					step = new Step(2);
+					stepMir = new Step(1);
 				}
 			break;
 			case rearLeft:
 			case frontRight:
-				if(step.balanceCoM() && step.updateStep()){
+				if(step.balanceCoM() && step.updateStep() & stepMir.updateStep()){
 					steppingLeg = leg.frontLeft;
 					step = new Step(0);
+					stepMir = new Step(3);
 				}
 			break;
 		}
 		if(steppingLeg != lastSteppingLeg) lastGlobalStepCenter = globalStepCenter.clone();
 		lastSteppingLeg = steppingLeg;
+	}
+	
+	public boolean home(){
+		globalStepCenter = Body.getGlobalStepCenter(localRobotPos, globalRobotPos);
+		globalCornerPos = Body.getGlobalCornerPos(localRobotPos, globalRobotPos);
+		frontLeftLeg.setFootPos(Body.getRelativeFootPos(globalCornerPos[0], globalFeetPos[0]));
+		frontRightLeg.setFootPos(Body.getRelativeFootPos(globalCornerPos[1], globalFeetPos[1]));
+		hindLeftLeg.setFootPos(Body.getRelativeFootPos(globalCornerPos[2], globalFeetPos[2]));
+		hindRightLeg.setFootPos(Body.getRelativeFootPos(globalCornerPos[3], globalFeetPos[3]));
+
+		stepLengthX = 0;
+		stepLengthY = 0;
+		
+		double footError = 0;
+		boolean isHome = false;
+		for(int i = 0; i < 3; i++){
+			footError += Math.abs(globalStepCenter[i].x + globalStepCenter[i].y - globalFeetPos[i].x - globalFeetPos[i].y + globalFeetPos[i].z);
+		}
+		if(footError < .1) isHome = true;
+		
+		if(!isHome){
+			switch(steppingLeg){
+			case frontLeft:
+				if(step.shiftCoM() && step.updateStep()){
+					steppingLeg = leg.rearLeft;
+					step = new Step(2);
+				}
+				break;
+			case rearLeft:
+				if(step.shiftCoM() && step.updateStep()){
+					steppingLeg = leg.rearRight;
+					step = new Step(3);
+				}
+				break;
+			case frontRight:
+				if(step.shiftCoM() && step.updateStep()){
+					steppingLeg = leg.frontLeft;
+					step = new Step(0);
+				}
+				break;
+			case rearRight:
+				if(step.shiftCoM() && step.updateStep()){
+					steppingLeg = leg.frontRight;
+					step = new Step(1);
+				}
+				break;
+			}
+			if(steppingLeg != lastSteppingLeg) lastGlobalStepCenter = globalStepCenter.clone();
+			lastSteppingLeg = steppingLeg;
+			return false;
+		}
+		else if(step.homeCoM()) return true;
+		else return false;
+		
 	}
 	
 	public void render(Graphics g){
@@ -370,6 +425,15 @@ public class RobotMotion {
 				
 			}
 			return false;
+		}
+		
+		public boolean homeCoM(){
+			if(Math.abs(localRobotPos.y) > .1) localRobotPos.y -= Math.signum(localRobotPos.y)*shiftSpeed/updateRate;
+			else localRobotPos.y = 0;
+			if(Math.abs(localRobotPos.y) > .1) localRobotPos.x -= Math.signum(localRobotPos.x)*shiftSpeed/updateRate;
+			else localRobotPos.x = 0;
+			if(localRobotPos.y == 0 && localRobotPos.x == 0) return true;
+			else return false;
 		}
 		
 	}

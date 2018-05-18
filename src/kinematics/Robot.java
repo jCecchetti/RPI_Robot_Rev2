@@ -66,7 +66,7 @@ public class Robot extends Thread{
 	}
 	
 	public void update(){
-		motion.handleWalkingLegs();
+		motion.update();
 	}
 	
 	public void render(){

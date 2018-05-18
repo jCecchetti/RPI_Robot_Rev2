@@ -6,7 +6,7 @@ import java.awt.event.KeyListener;
 public class KeyManager implements KeyListener {
 	
 	public static boolean[] keys;
-	public static boolean up, down, left, right, i, k, j, l, w, a, s, d, e, o, q, u, space;
+	public static boolean up, down, left, right, numup, numdown, numleft, numright, num5, i, k, j, l, w, a, s, d, e, o, q, u, shift, space;
 	
 	
 	public KeyManager(){
@@ -19,6 +19,12 @@ public class KeyManager implements KeyListener {
 		down = keys[KeyEvent.VK_DOWN];
 		left = keys[KeyEvent.VK_LEFT];
 		right = keys[KeyEvent.VK_RIGHT];	
+		
+		numup = keys[KeyEvent.VK_NUMPAD8];
+		numdown = keys[KeyEvent.VK_NUMPAD2];
+		numleft = keys[KeyEvent.VK_NUMPAD4];
+		numright = keys[KeyEvent.VK_NUMPAD6];
+		num5 = keys[KeyEvent.VK_NUMPAD5];
 		
 		i = keys[KeyEvent.VK_I];
 		k = keys[KeyEvent.VK_K];
@@ -35,13 +41,15 @@ public class KeyManager implements KeyListener {
 		
 		q = keys[KeyEvent.VK_Q];
 		u = keys[KeyEvent.VK_U];
+		
+		shift = keys[KeyEvent.VK_SHIFT];
 
 		space = keys[KeyEvent.VK_SPACE];
 	}
+	
 	@Override
 	public void keyPressed(KeyEvent e) {
 		keys[e.getKeyCode()] = true;
-		System.out.println("Pressed!");
 	}
 
 	@Override
