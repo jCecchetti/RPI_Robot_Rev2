@@ -61,20 +61,30 @@ public class RobotMotion {
 			globalRobotPos.x += robotSpeed/updateRate;
 			currentRobotSpeedX = robotSpeed; 
 		}
+		else if(KeyManager.w){
+			globalRobotPos.x += 2.0*robotSpeed/updateRate;
+			currentRobotSpeedX = 2.0*robotSpeed;
+		}
 		else if(KeyManager.numdown) {
 			globalRobotPos.x -= robotSpeed/updateRate;
 			currentRobotSpeedX = -robotSpeed; 
 		}
+		else if(KeyManager.s){
+			globalRobotPos.x -= 2.0*robotSpeed/updateRate;
+			currentRobotSpeedX = -2.0*robotSpeed;
+		}
 		else currentRobotSpeedX = 0; 
-		if(KeyManager.numleft){ 
+		if(KeyManager.numleft || KeyManager.q){ 
 			globalRobotPos.y += robotSpeed/updateRate;
 			currentRobotSpeedY = robotSpeed;
 		}
-		else if(KeyManager.numright){
+		else if(KeyManager.numright || KeyManager.e){
 			globalRobotPos.y -= robotSpeed/updateRate;
 			currentRobotSpeedY = -robotSpeed;
 		}
 		else currentRobotSpeedY = 0;
+		
+		
 		if(KeyManager.a) localRobotPos.yaw += turningSpeed/updateRate;
 		if(KeyManager.d) localRobotPos.yaw -= turningSpeed/updateRate;
 		
@@ -200,7 +210,7 @@ public class RobotMotion {
 		switch(steppingLeg){
 			case rearRight:
 			case frontLeft:
-				if(step.balanceCoM() && step.updateStep() & stepMir.updateStep()){
+				if(step.balanceCoM() && step.updateFastStep() & stepMir.updateFastStep()){
 					steppingLeg = leg.frontRight;
 					step = new Step(2);
 					stepMir = new Step(1);
@@ -208,7 +218,7 @@ public class RobotMotion {
 			break;
 			case rearLeft:
 			case frontRight:
-				if(step.balanceCoM() && step.updateStep() & stepMir.updateStep()){
+				if(step.balanceCoM() && step.updateFastStep() & stepMir.updateFastStep()){
 					steppingLeg = leg.frontLeft;
 					step = new Step(0);
 					stepMir = new Step(3);
@@ -362,6 +372,26 @@ public class RobotMotion {
 			return finishedStepping;
 		}
 		
+		public boolean updateFastStep(){
+			if(!startedStepping) stepTimer.reset();//timer doesn't start until updateStep() is first called
+			startedStepping = true;
+			if(stepTimer.get() < .15){
+				globalFeetPos[leg].x = lastGlobalStepCenter[leg].x + stepLengthX;
+				globalFeetPos[leg].y = lastGlobalStepCenter[leg].y + stepLengthY;
+				globalFeetPos[leg].z = stepHeight;
+			}
+			else if(stepTimer.get() < .4){
+				globalFeetPos[leg].x = lastGlobalStepCenter[leg].x + stepLengthX;
+				globalFeetPos[leg].y = lastGlobalStepCenter[leg].y + stepLengthY;
+				globalFeetPos[leg].z = 0;
+				//localRobotPos.y = -.5;
+			}
+			else{
+				finishedStepping = true;
+			}
+			return finishedStepping;
+		}
+		
 		public boolean shiftCoM(){
 			double speed = shiftSpeed/updateRate;
 			Position adjustedCoMPos = Body.getGlobalAdjustedCoMPos(localRobotPos, globalRobotPos, steppingLeg.getLegNum());
@@ -431,6 +461,13 @@ public class RobotMotion {
 					localRobotPos.y += speed*(globalFeetPos[2].y - CoMPos.y)/dist;
 					localRobotPos.x += speed*(globalFeetPos[2].x - CoMPos.x)/dist;
 				}
+				else{
+					double dist = Trig.dist(CoMPos, globalFeetPos[2]);
+					localRobotPos.y -= speed*(globalFeetPos[2].y - CoMPos.y)/dist;
+					localRobotPos.x -= speed*(globalFeetPos[2].x - CoMPos.x)/dist;
+				}
+				if(HandleCoM.CoMStable(globalFeetPos[0], globalFeetPos[2], globalFeetPos[3], frontBalanceLimit) &&
+						!HandleCoM.CoMStable(globalFeetPos[0], globalFeetPos[2], globalFeetPos[3], rearBalanceLimit));
 				else return true;
 				break;
 				
