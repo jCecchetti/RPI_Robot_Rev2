@@ -77,6 +77,11 @@ public class RobotMotion {
 		else currentRobotSpeedY = 0;
 		if(KeyManager.a) localRobotPos.yaw += turningSpeed/updateRate;
 		if(KeyManager.d) localRobotPos.yaw -= turningSpeed/updateRate;
+		
+		if(KeyManager.j) localRobotPos.y += 2.5/updateRate;
+		else if(KeyManager.l) localRobotPos.y -= 2.5/updateRate;
+		if(KeyManager.i) localRobotPos.x += 2.5/updateRate;
+		else if(KeyManager.k) localRobotPos.x -= 2.5/updateRate;
 	}
 	
 	private enum leg{frontLeft (0), frontRight (1), rearLeft(2), rearRight (3);
@@ -120,6 +125,7 @@ public class RobotMotion {
 		if(KeyManager.num5) currentState = State.stopped;
 		else if(KeyManager.w) currentState = State.trotting;
 		else if(KeyManager.numup || KeyManager.numdown || KeyManager.numleft || KeyManager.numright) currentState = State.walking;
+		else if(KeyManager.j || KeyManager.k || KeyManager.l || KeyManager.i) currentState = State.standing;
 		else if(KeyManager.space) end = true;
 		setWantedState(currentState);
 	}
@@ -170,6 +176,7 @@ public class RobotMotion {
 	}
 	
 	public void handleStanding(){
+		updateGlobalRobotPos();
 		globalCornerPos = Body.getGlobalCornerPos(localRobotPos, globalRobotPos);
 		frontLeftLeg.setFootPos(Body.getRelativeFootPos(globalCornerPos[0], globalFeetPos[0]));
 		frontRightLeg.setFootPos(Body.getRelativeFootPos(globalCornerPos[1], globalFeetPos[1]));
@@ -302,8 +309,8 @@ public class RobotMotion {
 		g.fillOval((int) (globalFeetPos[2].x*Constants.PixelsPerIn + Constants.x0)-5, (int) (globalFeetPos[2].y*Constants.PixelsPerIn + Constants.y0)-5, 10, 10);
 		g.fillOval((int) (globalFeetPos[3].x*Constants.PixelsPerIn + Constants.x0)-5, (int) (globalFeetPos[3].y*Constants.PixelsPerIn + Constants.y0)-5, 10, 10);
 		
-		/*g.fillOval((int) (Body.getRelativeFootPos(globalCornerPos[0], globalFeetPos[0]).x*Constants.PixelsPerIn + Constants.x0)-5,
-				(int) (Body.getRelativeFootPos(globalCornerPos[0], globalFeetPos[0]).y*Constants.PixelsPerIn + Constants.y0)-5, 10, 10);*/
+		g.fillOval((int) (Body.getRelativeFootPos(globalCornerPos[0], globalFeetPos[0]).x*Constants.PixelsPerIn + Constants.x0)-5,
+				(int) (Body.getRelativeFootPos(globalCornerPos[0], globalFeetPos[0]).y*Constants.PixelsPerIn + Constants.y0)-5, 10, 10);
 		//draw stable base triangle
 		g.drawPolygon(xposTri, yposTri, 4);
 		if(steppingLeg == leg.frontLeft && HandleCoM.CoMStable(globalFeetPos[1], globalFeetPos[2], globalFeetPos[3], Body.getGlobalCoMPos(localRobotPos, globalRobotPos))) g.setColor(Color.WHITE);
