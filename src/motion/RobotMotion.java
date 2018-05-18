@@ -378,7 +378,7 @@ public class RobotMotion {
 			if(stepTimer.get() < .15){
 				globalFeetPos[leg].x = lastGlobalStepCenter[leg].x + stepLengthX;
 				globalFeetPos[leg].y = lastGlobalStepCenter[leg].y + stepLengthY;
-				globalFeetPos[leg].z = stepHeight;
+				globalFeetPos[leg].z = stepHeight/2.0;
 			}
 			else if(stepTimer.get() < .4){
 				globalFeetPos[leg].x = lastGlobalStepCenter[leg].x + stepLengthX;
