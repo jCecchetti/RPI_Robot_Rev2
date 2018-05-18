@@ -82,6 +82,8 @@ public class RobotMotion {
 		else if(KeyManager.l) localRobotPos.y -= 2.5/updateRate;
 		if(KeyManager.i) localRobotPos.x += 2.5/updateRate;
 		else if(KeyManager.k) localRobotPos.x -= 2.5/updateRate;
+		if(KeyManager.u) localRobotPos.yaw += 25.0/updateRate;
+		else if(KeyManager.o) localRobotPos.yaw -= 25.0/updateRate;
 	}
 	
 	private enum leg{frontLeft (0), frontRight (1), rearLeft(2), rearRight (3);
@@ -125,7 +127,7 @@ public class RobotMotion {
 		if(KeyManager.num5) currentState = State.stopped;
 		else if(KeyManager.w) currentState = State.trotting;
 		else if(KeyManager.numup || KeyManager.numdown || KeyManager.numleft || KeyManager.numright) currentState = State.walking;
-		else if(KeyManager.j || KeyManager.k || KeyManager.l || KeyManager.i) currentState = State.standing;
+		else if(KeyManager.j || KeyManager.k || KeyManager.l || KeyManager.i || KeyManager.o || KeyManager.u) currentState = State.standing;
 		else if(KeyManager.space) end = true;
 		setWantedState(currentState);
 	}

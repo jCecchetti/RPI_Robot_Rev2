@@ -87,15 +87,15 @@ public class Body {
 	
 	public static Position getRelativeFootPos(Position globalCornerPos, Position globalFootPos){
 		
-		double[] cornerPos = {globalFootPos.x - globalCornerPos.x, globalFootPos.y - globalCornerPos.y, globalFootPos.z - globalCornerPos.z};
+		double[] unrotatedLocalFootPos = {globalFootPos.x - globalCornerPos.x, globalFootPos.y - globalCornerPos.y, globalFootPos.z - globalCornerPos.z};
 		
-		double[][] yawRotationMatrix = {{Math.cos(Math.toRadians(globalCornerPos.yaw)), -Math.sin(Math.toRadians(globalCornerPos.yaw)), 0},
-			    {Math.sin(Math.toRadians(globalCornerPos.yaw)), Math.cos(Math.toRadians(globalCornerPos.yaw)), 0},
+		double[][] yawRotationMatrix = {{Math.cos(Math.toRadians(-globalCornerPos.yaw)), -Math.sin(Math.toRadians(-globalCornerPos.yaw)), 0},
+			    {Math.sin(Math.toRadians(-globalCornerPos.yaw)), Math.cos(Math.toRadians(-globalCornerPos.yaw)), 0},
 			    {0, 0, 1}};
 		
-		cornerPos = Matrix.multiply(yawRotationMatrix, cornerPos);
+		unrotatedLocalFootPos = Matrix.multiply(yawRotationMatrix, unrotatedLocalFootPos);
 
-		Position relativeFootPos = new Position(cornerPos[0], cornerPos[1], cornerPos[2],0,0,0);
+		Position relativeFootPos = new Position(unrotatedLocalFootPos[0], unrotatedLocalFootPos[1], unrotatedLocalFootPos[2],0,0,0);
 		
 		return relativeFootPos;
 	}
