@@ -118,7 +118,7 @@ public class RobotMotion {
 	public void update(){
 		KeyManager.tick();
 		if(KeyManager.num5) currentState = State.stopped;
-		else if(KeyManager.shift) currentState = State.trotting;
+		else if(KeyManager.w) currentState = State.trotting;
 		else if(KeyManager.numup || KeyManager.numdown || KeyManager.numleft || KeyManager.numright) currentState = State.walking;
 		else if(KeyManager.space) end = true;
 		setWantedState(currentState);
@@ -180,12 +180,12 @@ public class RobotMotion {
 	
 	public void handleTrottingLegs(){
 		updateGlobalRobotPos();
+		globalStepCenter = Body.getGlobalStepCenter(localRobotPos, globalRobotPos);
 		globalCornerPos = Body.getGlobalCornerPos(localRobotPos, globalRobotPos);
 		frontLeftLeg.setFootPos(Body.getRelativeFootPos(globalCornerPos[0], globalFeetPos[0]));
 		frontRightLeg.setFootPos(Body.getRelativeFootPos(globalCornerPos[1], globalFeetPos[1]));
 		hindLeftLeg.setFootPos(Body.getRelativeFootPos(globalCornerPos[2], globalFeetPos[2]));
 		hindRightLeg.setFootPos(Body.getRelativeFootPos(globalCornerPos[3], globalFeetPos[3]));
-		
 		stepLengthX = currentRobotSpeedX*stepTime*2.0;
 		stepLengthY = currentRobotSpeedY*stepTime*2.0;
 		switch(steppingLeg){
@@ -206,7 +206,9 @@ public class RobotMotion {
 				}
 			break;
 		}
-		if(steppingLeg != lastSteppingLeg) lastGlobalStepCenter = globalStepCenter.clone();
+		if(steppingLeg != lastSteppingLeg){
+			lastGlobalStepCenter = globalStepCenter.clone();
+		}
 		lastSteppingLeg = steppingLeg;
 	}
 	
