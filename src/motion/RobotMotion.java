@@ -179,7 +179,7 @@ public class RobotMotion {
 	}
 	
 	public void handleTrottingLegs(){
-		//updateGlobalRobotPos();
+		updateGlobalRobotPos();
 		globalCornerPos = Body.getGlobalCornerPos(localRobotPos, globalRobotPos);
 		frontLeftLeg.setFootPos(Body.getRelativeFootPos(globalCornerPos[0], globalFeetPos[0]));
 		frontRightLeg.setFootPos(Body.getRelativeFootPos(globalCornerPos[1], globalFeetPos[1]));
