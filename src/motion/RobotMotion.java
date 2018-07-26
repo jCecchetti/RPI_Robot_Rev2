@@ -19,7 +19,7 @@ public class RobotMotion {
 	
 	static {
 	    try {
-	    	System.load("/home/pi/RPI_Robot_Rev2/libriaries/Jamepad/libs/linux32/libjamepad.so");
+	    	System.load("/home/pi/RPI_Robot_Rev2/libriaries/Jamepad/libs/linux64/libjamepad64.so");
 	    } catch (UnsatisfiedLinkError e) {
 	      System.err.println("Native code library failed to load.\n" + e);
 	      System.exit(1);
