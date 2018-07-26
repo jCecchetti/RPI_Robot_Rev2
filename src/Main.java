@@ -11,17 +11,11 @@ public class Main{
 
 	public static void main(String[] args) {
 
-		    try {
-		    	System.load("/home/pi/RPI_Robot_Rev2/libriaries/Jamepad/libs/linux64/libjamepad64.so");
-		    } catch (UnsatisfiedLinkError e) {
-		      System.err.println("Native code library failed to load.\n" + e);
-		      System.exit(1);
-		    }
 		//joystick = new Joystick();
 		//mathTest(0,0,-5.0, true);
 		//mathTest(0,0,-5.0, false);
-		//Robot robot = new Robot();
-		//robot.start();
+		Robot robot = new Robot();
+		robot.start();
 		//for(int i = 0; i < 1000; i++){
 			//KeyManager.tick();
 			//if(KeyManager.w)System.out.print("s");

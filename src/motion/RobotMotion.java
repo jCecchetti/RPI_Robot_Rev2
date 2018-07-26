@@ -17,15 +17,6 @@ import util.Trig;
 
 public class RobotMotion {
 	
-	/*static {
-	    try {
-	    	System.load("/home/pi/RPI_Robot_Rev2/libriaries/Jamepad/libs/linux64/libjamepad64.so");
-	    } catch (UnsatisfiedLinkError e) {
-	      System.err.println("Native code library failed to load.\n" + e);
-	      System.exit(1);
-	    }
-	  }*/
-	
 	public Position globalRobotPos = new Position(0,0,6.5,0,0,0);
 	public Position localRobotPos = new Position(0,0,0,0,0,0);
 	public Position[] globalFeetPos = {new Position(Constants.BODYLENGTH/2, Constants.BODYWIDTH/2, 0,0,0,0),
@@ -71,6 +62,7 @@ public class RobotMotion {
 		this.hindLeftLeg = hindLeftLeg;
 		this.hindRightLeg = hindRightLeg;
 		controller = new ControllerManager();
+		controller.quitSDLGamepad();
 		controller.initSDLGamepad();
 	}
 	
