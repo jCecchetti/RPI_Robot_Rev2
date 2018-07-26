@@ -3,6 +3,10 @@ package motion;
 import java.awt.Color;
 import java.awt.Graphics;
 
+import com.studiohartman.jamepad.ControllerManager;
+import com.studiohartman.jamepad.ControllerState;
+
+import input.Joystick;
 import input.KeyManager;
 import kinematics.Body;
 import kinematics.Leg;
@@ -44,56 +48,50 @@ public class RobotMotion {
 	private double stepLengthX = 0;
 	private double stepLengthY = 0;
 	private double stepHeight = 1;
+	private double deadBand = .05;
 	private Timer timer = new Timer();
 	public boolean end = false;
-
+	//private Joystick j = new Joystick();
+	ControllerManager controller;
+	ControllerState j;
+	
 	public RobotMotion(Leg frontLeftLeg, Leg frontRightLeg, Leg hindLeftLeg, Leg hindRightLeg){
 		this.legs = legs;
 		this.frontLeftLeg = frontLeftLeg;
 		this.frontRightLeg = frontRightLeg;
 		this.hindLeftLeg = hindLeftLeg;
 		this.hindRightLeg = hindRightLeg;
+		controller = new ControllerManager();
+		controller.initSDLGamepad();
 	}
 	
 	public void updateGlobalRobotPos(){
-		KeyManager.tick();
-		if(KeyManager.numup) {
-			globalRobotPos.x += robotSpeed/updateRate;
-			currentRobotSpeedX = robotSpeed; 
+		j = controller.getState(0);
+		if(!j.isConnected) System.out.println("Controller Not Connected!");
+		if(j.a) System.out.println("a");
+		if(currentState == State.walking) {
+			globalRobotPos.x += j.rightStickY*robotSpeed/updateRate;
+			globalRobotPos.y += j.rightStickX*robotSpeed/updateRate;
+			currentRobotSpeedX = j.rightStickY*robotSpeed;
+			currentRobotSpeedY = j.rightStickX*robotSpeed;
+			localRobotPos.yaw += j.leftStickX*turningSpeed/updateRate;
+			
 		}
-		else if(KeyManager.w){
-			globalRobotPos.x += 2.0*robotSpeed/updateRate;
-			currentRobotSpeedX = 2.0*robotSpeed;
+		else if(currentState == State.standing){
+			localRobotPos.x += j.rightStickY*2.5/updateRate;
+			localRobotPos.y += j.rightStickX*2.5/updateRate;
+			localRobotPos.yaw += j.leftStickX*25.0/updateRate;
+			if(j.lb) localRobotPos.roll += 25.0/updateRate;
+			else if(j.rb) localRobotPos.roll -= 25.0/updateRate;
+			localRobotPos.pitch += j.leftStickY*20.0/updateRate;
 		}
-		else if(KeyManager.numdown) {
-			globalRobotPos.x -= robotSpeed/updateRate;
-			currentRobotSpeedX = -robotSpeed; 
+		else if(currentState == State.stopped){
+			
 		}
-		else if(KeyManager.s){
-			globalRobotPos.x -= 2.0*robotSpeed/updateRate;
-			currentRobotSpeedX = -2.0*robotSpeed;
-		}
-		else currentRobotSpeedX = 0; 
-		if(KeyManager.numleft || KeyManager.q){ 
-			globalRobotPos.y += robotSpeed/updateRate;
-			currentRobotSpeedY = robotSpeed;
-		}
-		else if(KeyManager.numright || KeyManager.e){
-			globalRobotPos.y -= robotSpeed/updateRate;
-			currentRobotSpeedY = -robotSpeed;
-		}
-		else currentRobotSpeedY = 0;
 		
+		localRobotPos.z += j.rightTrigger*1.5/updateRate;
+		localRobotPos.z -= j.leftTrigger*1.5/updateRate;
 		
-		if(KeyManager.a) localRobotPos.yaw += turningSpeed/updateRate;
-		if(KeyManager.d) localRobotPos.yaw -= turningSpeed/updateRate;
-		
-		if(KeyManager.j) localRobotPos.y += 2.5/updateRate;
-		else if(KeyManager.l) localRobotPos.y -= 2.5/updateRate;
-		if(KeyManager.i) localRobotPos.x += 2.5/updateRate;
-		else if(KeyManager.k) localRobotPos.x -= 2.5/updateRate;
-		if(KeyManager.u) localRobotPos.yaw += 25.0/updateRate;
-		else if(KeyManager.o) localRobotPos.yaw -= 25.0/updateRate;
 	}
 	
 	private enum leg{frontLeft (0), frontRight (1), rearLeft(2), rearRight (3);
@@ -133,12 +131,13 @@ public class RobotMotion {
 	}
 	
 	public void update(){
-		KeyManager.tick();
-		if(KeyManager.num5) currentState = State.stopped;
-		else if(KeyManager.w) currentState = State.trotting;
-		else if(KeyManager.numup || KeyManager.numdown || KeyManager.numleft || KeyManager.numright) currentState = State.walking;
-		else if(KeyManager.j || KeyManager.k || KeyManager.l || KeyManager.i || KeyManager.o || KeyManager.u) currentState = State.standing;
-		else if(KeyManager.space) end = true;
+		j = controller.getState(0);
+		if(j.y) currentState = State.stopped;
+		else if(j.b) currentState = State.trotting;
+		else if(j.a) currentState = State.walking;
+		//else if(KeyManager.j || KeyManager.k || KeyManager.l || KeyManager.i || KeyManager.o || KeyManager.u) currentState = State.standing;
+		else if(j.back) end = true;
+		else if(j.x) currentState = State.standing;
 		setWantedState(currentState);
 	}
 	
@@ -321,8 +320,8 @@ public class RobotMotion {
 		g.fillOval((int) (globalFeetPos[2].x*Constants.PixelsPerIn + Constants.x0)-5, (int) (globalFeetPos[2].y*Constants.PixelsPerIn + Constants.y0)-5, 10, 10);
 		g.fillOval((int) (globalFeetPos[3].x*Constants.PixelsPerIn + Constants.x0)-5, (int) (globalFeetPos[3].y*Constants.PixelsPerIn + Constants.y0)-5, 10, 10);
 		
-		g.fillOval((int) (Body.getRelativeFootPos(globalCornerPos[0], globalFeetPos[0]).x*Constants.PixelsPerIn + Constants.x0)-5,
-				(int) (Body.getRelativeFootPos(globalCornerPos[0], globalFeetPos[0]).y*Constants.PixelsPerIn + Constants.y0)-5, 10, 10);
+		/*g.fillOval((int) (Body.getRelativeFootPos(globalCornerPos[0], globalFeetPos[0]).x*Constants.PixelsPerIn + Constants.x0)-5,
+				(int) (Body.getRelativeFootPos(globalCornerPos[0], globalFeetPos[0]).y*Constants.PixelsPerIn + Constants.y0)-5, 10, 10);*/
 		//draw stable base triangle
 		g.drawPolygon(xposTri, yposTri, 4);
 		if(steppingLeg == leg.frontLeft && HandleCoM.CoMStable(globalFeetPos[1], globalFeetPos[2], globalFeetPos[3], Body.getGlobalCoMPos(localRobotPos, globalRobotPos))) g.setColor(Color.WHITE);
@@ -331,8 +330,8 @@ public class RobotMotion {
 		else if(steppingLeg == leg.rearRight && HandleCoM.CoMStable(globalFeetPos[0], globalFeetPos[1], globalFeetPos[2], Body.getGlobalCoMPos(localRobotPos, globalRobotPos))) g.setColor(Color.WHITE);
 		g.fillOval((int) (Body.getGlobalCoMPos(localRobotPos, globalRobotPos).x*Constants.PixelsPerIn + Constants.x0)-5,
 				(int) (Body.getGlobalCoMPos(localRobotPos, globalRobotPos).y*Constants.PixelsPerIn + Constants.y0)-5, 10, 10);
-		g.fillOval((int) (Body.getGlobalAdjustedCoMPos(localRobotPos, globalRobotPos, steppingLeg.getLegNum()).x*Constants.PixelsPerIn + Constants.x0)-5,
-				(int) (Body.getGlobalAdjustedCoMPos(localRobotPos, globalRobotPos, steppingLeg.getLegNum()).y*Constants.PixelsPerIn + Constants.y0)-5, 10, 10);
+		/*g.fillOval((int) (Body.getGlobalAdjustedCoMPos(localRobotPos, globalRobotPos, steppingLeg.getLegNum()).x*Constants.PixelsPerIn + Constants.x0)-5,
+				(int) (Body.getGlobalAdjustedCoMPos(localRobotPos, globalRobotPos, steppingLeg.getLegNum()).y*Constants.PixelsPerIn + Constants.y0)-5, 10, 10);*/
 	}
 	
 	/*Class for handling steps*/

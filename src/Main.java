@@ -3,19 +3,24 @@ import kinematics.Body;
 import kinematics.Robot;
 import util.Position;
 import util.Trig;
+import input.Joystick;
 
 public class Main{
 	
+	//static Joystick joystick;
 
 	public static void main(String[] args) {
+		
+		//joystick = new Joystick();
 		//mathTest(0,0,-5.0, true);
 		//mathTest(0,0,-5.0, false);
 		Robot robot = new Robot();
 		robot.start();
-//		for(int i = 0; i < 1000; i++){
-//			KeyManager.tick();
-//			if(KeyManager.w)System.out.print("s");
-//		}
+		//for(int i = 0; i < 1000; i++){
+			//KeyManager.tick();
+			//if(KeyManager.w)System.out.print("s");
+			//joystick.updateJoystick();
+		//}
 	
 	}	
 	
