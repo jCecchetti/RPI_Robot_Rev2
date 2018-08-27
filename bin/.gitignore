@@ -1,4 +1,6 @@
+/adafruithat/
 /input/
-/util/
-/motion/
 /kinematics/
+/motion/
+/simulationdisplay/
+/util/
