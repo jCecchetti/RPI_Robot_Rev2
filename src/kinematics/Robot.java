@@ -57,8 +57,8 @@ public class Robot extends Thread{
 	public void init(){
 		setStartPosition();
 		if(Constants.SIMULATION) display = new Display(title, Constants.SIMWIDTH, Constants.SIMHEIGHT);
-		//else display = new Display(title, 100, 100);
-		//display.getFrame().addKeyListener(keyManager);
+		else display = new Display(title, 100, 100);
+		display.getFrame().addKeyListener(keyManager);
 	}
 	
 	public void stopRobot(){

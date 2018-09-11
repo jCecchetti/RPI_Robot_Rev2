@@ -52,8 +52,8 @@ public class RobotMotion {
 	private Timer timer = new Timer();
 	public boolean end = false;
 	//private Joystick j = new Joystick();
-	ControllerManager controller;
-	ControllerState j;
+	//ControllerManager controller;
+	//ControllerState j;
 	
 	public RobotMotion(Leg frontLeftLeg, Leg frontRightLeg, Leg hindLeftLeg, Leg hindRightLeg){
 		this.legs = legs;
@@ -61,13 +61,65 @@ public class RobotMotion {
 		this.frontRightLeg = frontRightLeg;
 		this.hindLeftLeg = hindLeftLeg;
 		this.hindRightLeg = hindRightLeg;
-		controller = new ControllerManager();
-		controller.quitSDLGamepad();
-		controller.initSDLGamepad();
+		//controller = new ControllerManager();
+		//controller.quitSDLGamepad();
+		//controller.initSDLGamepad();
 	}
-	
+
 	public void updateGlobalRobotPos(){
-		j = controller.getState(0);
+		KeyManager.tick();
+		if(KeyManager.numup) {
+			globalRobotPos.x += robotSpeed/updateRate;
+			currentRobotSpeedX = robotSpeed; 
+		}
+		else if(KeyManager.up){
+			globalRobotPos.x += 2.0*robotSpeed/updateRate;
+			currentRobotSpeedX = 2.0*robotSpeed;
+		}
+		else if(KeyManager.numdown) {
+			globalRobotPos.x -= robotSpeed/updateRate;
+			currentRobotSpeedX = -robotSpeed; 
+		}
+		else if(KeyManager.down){
+			globalRobotPos.x -= 2.0*robotSpeed/updateRate;
+			currentRobotSpeedX = -2.0*robotSpeed;
+		}
+		else currentRobotSpeedX = 0; 
+		if(KeyManager.numleft || KeyManager.q){ 
+			globalRobotPos.y += robotSpeed/updateRate;
+			currentRobotSpeedY = robotSpeed;
+		}
+		else if(KeyManager.numright || KeyManager.e){
+			globalRobotPos.y -= robotSpeed/updateRate;
+			currentRobotSpeedY = -robotSpeed;
+		}
+		else currentRobotSpeedY = 0;
+
+		//System.out.println(globalRobotPos.x);
+		if(KeyManager.j) localRobotPos.yaw += turningSpeed/updateRate;
+		if(KeyManager.l) localRobotPos.yaw -= turningSpeed/updateRate;
+
+		if(KeyManager.a) localRobotPos.y += 2.5/updateRate;
+		else if(KeyManager.d) localRobotPos.y -= 2.5/updateRate;
+		if(KeyManager.s){
+			localRobotPos.x = 0;
+			localRobotPos.y = 0;
+			localRobotPos.z = 0;
+			localRobotPos.roll = 0;
+			localRobotPos.yaw = 0;
+		}
+		if(KeyManager.w) localRobotPos.x += 2.5/updateRate;
+		else if(KeyManager.x) localRobotPos.x -= 2.5/updateRate;
+		if(KeyManager.e) localRobotPos.z += 1.5/updateRate;
+		else if(KeyManager.c) localRobotPos.z -= 1.5/updateRate;
+		if(KeyManager.f) localRobotPos.yaw += 25.0/updateRate;
+		else if(KeyManager.h) localRobotPos.yaw -= 25.0/updateRate;
+		if(KeyManager.r) localRobotPos.roll += 25.0/updateRate;
+		else if(KeyManager.y) localRobotPos.roll -= 25.0/updateRate;
+		if(KeyManager.v) localRobotPos.pitch += 20.0/updateRate;
+		else if(KeyManager.n) localRobotPos.pitch -= 20.0/updateRate;
+
+		/*j = controller.getState(0);
 		if(!j.isConnected) System.out.println("Controller Not Connected!");
 		if(j.a) System.out.println("a");
 		if(currentState == State.walking) {
@@ -92,7 +144,7 @@ public class RobotMotion {
 		
 		localRobotPos.z += j.rightTrigger*1.5/updateRate;
 		localRobotPos.z -= j.leftTrigger*1.5/updateRate;
-		
+		*/
 	}
 	
 	private enum leg{frontLeft (0), frontRight (1), rearLeft(2), rearRight (3);
@@ -108,7 +160,7 @@ public class RobotMotion {
 	}
 	public enum State{walking, trotting, laying, stopped, stopping, standing}
 	
-	public State currentState = State.laying;
+	public State currentState = State.walking;
 	
 	public void setWantedState(State wantedState){
 		
@@ -132,7 +184,16 @@ public class RobotMotion {
 	}
 	
 	public void update(){
-		j = controller.getState(0);
+		KeyManager.tick();
+		if(KeyManager.num5) currentState = State.stopped;
+		else if(KeyManager.i) currentState = State.trotting;
+		else if(KeyManager.numup || KeyManager.numdown || KeyManager.numleft || KeyManager.numright) currentState = State.walking;
+		//else if(KeyManager.j || KeyManager.k || KeyManager.l || KeyManager.i || KeyManager.o || KeyManager.u) currentState = State.standing;
+		else if(KeyManager.space) end = true;
+		else if(KeyManager.s) currentState = State.standing;
+		setWantedState(currentState);
+		
+		/*j = controller.getState(0);
 		if(j.y) currentState = State.stopped;
 		else if(j.b) currentState = State.trotting;
 		else if(j.a) currentState = State.walking;
@@ -140,6 +201,7 @@ public class RobotMotion {
 		else if(j.back) end = true;
 		else if(j.x) currentState = State.standing;
 		setWantedState(currentState);
+		*/
 	}
 	
 	private leg steppingLeg = leg.frontLeft;
