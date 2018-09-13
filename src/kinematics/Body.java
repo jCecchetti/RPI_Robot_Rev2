@@ -29,7 +29,6 @@ public class Body {
 		double[][] yawRotationMatrix = {{Math.cos(Math.toRadians(localBodyPos.yaw)), -Math.sin(Math.toRadians(localBodyPos.yaw)), 0},
 									    {Math.sin(Math.toRadians(localBodyPos.yaw)), Math.cos(Math.toRadians(localBodyPos.yaw)), 0},
 									    {0, 0, 1}};
-		//double[][] RotationMatrix = Matrix.multiply(rollRotationMatrix, Matrix.Multiply)
 		for(int i = 0; i < 4; i++){
 			unrotatedLocalCornerPos[i] = Matrix.multiply(rollRotationMatrix, unrotatedLocalCornerPos[i]);
 			unrotatedLocalCornerPos[i] = Matrix.multiply(pitchRotationMatrix, unrotatedLocalCornerPos[i]);

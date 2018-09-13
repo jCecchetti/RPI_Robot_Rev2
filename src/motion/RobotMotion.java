@@ -43,7 +43,7 @@ public class RobotMotion {
 	private double turningSpeed = 7.0;// degrees/s
 	private double updateRate = Constants.UPDATESPERSECOND;
 	private Leg frontLeftLeg, frontRightLeg, hindLeftLeg, hindRightLeg;
-	private Leg[] legs;
+	//private Leg[] legs;
 	private double stepTime = 1.0;
 	private double stepLengthX = 0;
 	private double stepLengthY = 0;
@@ -56,7 +56,7 @@ public class RobotMotion {
 	//ControllerState j;
 	
 	public RobotMotion(Leg frontLeftLeg, Leg frontRightLeg, Leg hindLeftLeg, Leg hindRightLeg){
-		this.legs = legs;
+		//this.legs = legs;
 		this.frontLeftLeg = frontLeftLeg;
 		this.frontRightLeg = frontRightLeg;
 		this.hindLeftLeg = hindLeftLeg;
@@ -68,7 +68,7 @@ public class RobotMotion {
 
 	public void updateGlobalRobotPos(){
 		KeyManager.tick();
-		if(KeyManager.numup) {
+		if(KeyManager.numup){
 			globalRobotPos.x += robotSpeed/updateRate;
 			currentRobotSpeedX = robotSpeed; 
 		}
@@ -160,7 +160,7 @@ public class RobotMotion {
 	}
 	public enum State{walking, trotting, laying, stopped, stopping, standing}
 	
-	public State currentState = State.walking;
+	public State currentState = State.standing;
 	
 	public void setWantedState(State wantedState){
 		
