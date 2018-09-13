@@ -18,8 +18,8 @@ public class Main{
 		//mathTest(0,0,-5.0, true);
 		//mathTest(0,0,-5.0, false);
 		Robot robot = new Robot();
-		//robot.start();
-		System.out.println(Body.getLocalCornerPos(new Position(0,0,0,0,32,10))[0].x);
+		robot.start();
+		//System.out.println(Body.getLocalCornerPos(new Position(0,0,0,0,32,10))[0].x);
 		//mathTest(0.0,0.0,-4.0,false);
 		//for(int i = 0; i < 1000; i++){
 			//KeyManager.tick();
